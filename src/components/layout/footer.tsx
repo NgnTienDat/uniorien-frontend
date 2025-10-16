@@ -1,9 +1,10 @@
+import Link from 'next/link';
 import React from 'react';
 import { FaLinkedin, FaGithub, FaFacebook } from 'react-icons/fa';
 
 const Footer: React.FC = () => {
     return (
-        <footer className="bg-sky-100 text-slate-800 p-5 ">
+        <footer className="bg-sky-100 text-slate-800 p-5">
             <div className="container mx-auto">
                 {/* Main content grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
@@ -23,17 +24,17 @@ const Footer: React.FC = () => {
                         <h3 className="text-lg font-semibold mb-4">Các Liên Kết</h3>
                         <ul className="space-y-2 text-blue-600">
                             <li>
-                                <a href="#" className="hover:underline">Tra cứu trường đại học</a>
+                                <Link href="/benchmarks" className="hover:underline">Tra cứu trường đại học</Link>
                             </li>
                             <li>
-                                <a href="#" className="hover:underline">Tra cứu ngành đào tạo</a>
+                                <Link href="/majors" className="hover:underline">Tra cứu ngành đào tạo</Link>
                             </li>
                         </ul>
                     </div>
 
                     <div className='p-5'>
                         <h3 className="text-lg font-semibold mb-4">Thông tin liên hệ</h3>
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-6">
                             <a href="https://www.linkedin.com/in/dat-nguyen-7b3411297/" aria-label="LinkedIn Profile" className="text-2xl text-gray-700
                              hover:text-blue-600 transition-colors">
                                 <FaLinkedin />

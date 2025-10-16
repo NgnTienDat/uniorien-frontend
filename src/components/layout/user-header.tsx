@@ -1,27 +1,60 @@
-import NavigationMenu from "@/components/common/NavigationMenu";
+"use client";
+
+import { useState } from "react";
+import { UONavigationMenu } from "@/components/common/UONavigationMenu";
+import { UOMobileSidebar } from "@/components/common/UOMobileSidebar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
+import { Menu } from "lucide-react";
 
 export default function UserHeader() {
+    const [menuOpen, setMenuOpen] = useState(false);
+
     return (
-        <div className="bg-white border-b border-gray-200 px-10 py-3 flex items-center gap-8">
-            <Link href="/" className="text-xl font-semibold text-blue-600">
-                UniOrien
-            </Link>
+        <header className="bg-white border-b border-gray-200 px-4 md:px-10 py-3 flex items-center justify-between relative z-50">
+            {/* Left section: Hamburger + Logo */}
+            <div className="flex items-center gap-6">
+                <div className="flex items-center gap-3 mr-4">
+                    {/* Hamburger button */}
+                    <button
+                        className="md:hidden p-2 text-gray-600 hover:text-blue-600 cursor-pointer"
+                        onClick={() => setMenuOpen(true)}
+                    >
+                        <Menu size={22} />
+                    </button>
 
-            <NavigationMenu
-                title="Tra cứu"
-                items={[
-                    { label: "Điểm chuẩn", href: "/lookup/scores" },
-                    { label: "Ngành đào tạo", href: "/lookup/majors" },
-                ]}
-            />
+                    {/* Logo */}
+                    <Link href="/" className="text-2xl font-semibold text-blue-600">
+                        UniOrien
+                    </Link>
+                </div>
 
-            <Link
-                href="/reviews"
-                className="text-gray-500 hover:text-gray-700"
-            >
-                Review trường đại học
-            </Link>
-        </div>
+                {/* Desktop navigation */}
+                <div className="hidden md:flex items-center gap-4">
+                    <UONavigationMenu
+                        title="Tra cứu"
+                        items={[
+                            { label: "Điểm chuẩn", href: "/benchmarks" },
+                            { label: "Ngành đào tạo", href: "/majors" },
+                        ]}
+                    />
+
+                    <Link
+                        href="/reviews"
+                        className="text-gray-600 hover:text-blue-600 hover:bg-gray-100 font-medium px-4 py-2 rounded-md transition-colors"
+                    >
+                        Xem đánh giá về trường đại học
+                    </Link>
+                </div>
+            </div>
+
+            <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+
+            {/* Mobile sidebar */}
+            <UOMobileSidebar isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+        </header>
     );
 }

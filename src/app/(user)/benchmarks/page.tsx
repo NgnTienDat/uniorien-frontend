@@ -1,14 +1,14 @@
 import Container from '@/components/ui/container'
 import React from 'react'
 
-function MajorPage() {
+function BenchmarkPage() {
     return (
         <Container>
             <div className='h-[1000px] bg-gray-200'>
-                Major Page
+                Benchmark Page
             </div>
         </Container>
     )
 }
 
-export default MajorPage
+export default BenchmarkPage

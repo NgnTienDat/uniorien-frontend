@@ -13,7 +13,7 @@ export default function UserLayout({
             </header>
 
             {/* Nội dung chính có padding-top để không bị header che */}
-            <main className="flex-1 pt-[80px]">
+            <main className="flex-1 mt-[80px]">
                 {children}
             </main>
 
