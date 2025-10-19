@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
                 {/* Main content grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
 
-                    <div className="space-y-4 p-5 border-r-1 border-slate-300">
+                    <div className="space-y-4 p-5 border-slate-300">
                         <h2 className="text-2xl font-bold text-blue-700">UniOrien</h2>
                         <p>
                             Nền tảng tư vấn chọn trường đại học tích hợp AI ChatBot. <br />
@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
                         </p>
                     </div>
 
-                    <div className='p-5 border-r-1 border-slate-300'>
+                    <div className='p-5 border-slate-300'>
                         <h3 className="text-lg font-semibold mb-4">Các Liên Kết</h3>
                         <ul className="space-y-2 text-blue-600">
                             <li>
@@ -56,7 +56,7 @@ const Footer: React.FC = () => {
                 </div>
 
                 <div className="mt-8 pt-6 border-t border-slate-300 text-center text-sm text-slate-500">
-                    <p>© 2025 UniOrien. Thiết kế và phát triển bởi Nguyễn Tiến Đạt</p>
+                    <p>Copyright © 2025 - Nguyen Tien Dat. All Rights Reserved.</p>
                 </div>
             </div>
         </footer>
