@@ -6,6 +6,7 @@ import { UOMobileSidebar } from "@/components/common/UOMobileSidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Menu } from "lucide-react";
+import { UOButton } from "@/components/common/UOButton";
 
 export default function UserHeader() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -47,11 +48,16 @@ export default function UserHeader() {
                     </Link>
                 </div>
             </div>
+            <div className="flex space-x-1">
 
-            <Avatar>
+
+            <UOButton name={"Đăng nhập"}/>
+
+            {/* <Avatar>
                 <AvatarImage src="https://github.com/shadcn.png" />
                 <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+            </Avatar> */}
+            </div>
 
             {/* Mobile sidebar */}
             <UOMobileSidebar isOpen={menuOpen} onClose={() => setMenuOpen(false)} />

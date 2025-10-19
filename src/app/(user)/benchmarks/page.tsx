@@ -1,57 +1,45 @@
-import Container from '@/components/ui/container'
-import React from 'react'
-
-// async function getUniversities() {
-//     const res = await fetch(`${process.env.SITE_URL}/api/universities`, {
-//         cache: "no-store",
-//     });
-//     const json = await res.json();
-//     // console.log("universities:", json);
-//     return json.result; // ✅ chỉ lấy mảng universities thôi
-// }
-
-export async function getUniversities() {
-    const res = await fetch(`${process.env.SITE_URL}/api/universities`, {
-        headers: {
-            "x-internal-key": process.env.INTERNAL_SECRET_KEY!,
-        },
-    });
-
-    if (!res.ok) {
-        throw new Error(`Failed to fetch universities: ${res.status}`);
-    }
-
-    const json = await res.json();
-    //     // console.log("universities:", json);
-    return json.result; // ✅ chỉ lấy mảng universities thôi
-}
+import { UOSelectBox } from "@/components/common/UOSelectBox";
+import Container from "@/components/ui/container";
+import UniversityList from "@/app/(user)/benchmarks/UniversityList";
+import { getUniversities } from "@/lib/services/universityServices";
+import { Search } from "lucide-react";
 
 
-async function BenchmarkPage() {
-
-
+export default async function BenchmarkPage() {
 
     const universities = await getUniversities();
-    // console.log('universities', universities);
 
     return (
         <Container>
-            <div className='h-[1000px] bg-gray-200'>
-                Benchmark Page
+            <div className="min-h-screen py-6">
+                {/* Tiêu đề */}
+                <h1 className="text-2xl md:text-3xl font-bold text-center mb-6">
+                    Tra cứu điểm chuẩn đại học năm 2025
+                </h1>
 
-                <div>
-                    <h1>Universities</h1>
-                    <ul>
-                        {universities.map((u: any) => (
-                            <li key={u.id}>{u.universityCode}</li>
-                        ))}
-                    </ul>
+                {/* Banner / Tin tức */}
+                <div className="w-full h-40 sm:h-56 md:h-64 bg-white border rounded-xl flex items-center justify-center mb-6">
+                    <p className="text-gray-500 italic">Tin tức chính sẽ hiển thị ở đây</p>
                 </div>
+
+                {/* Ô tìm kiếm + chọn tỉnh */}
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-6">
+                    <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                        <input
+                            type="text"
+                            placeholder="Nhập tên trường đại học"
+                            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none bg-white"
+                        />
+                    </div>
+                    <UOSelectBox />
+                </div>
+
+                {/* Danh sách trường */}
+                {universities &&
+                    <UniversityList universities={universities} />
+                }
             </div>
-
-
         </Container>
-    )
+    );
 }
-
-export default BenchmarkPage
