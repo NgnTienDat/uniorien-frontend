@@ -21,7 +21,7 @@ export default function UniversityList({ universities }: UniversityListProps) {
                     <React.Fragment key={u.id}>
                         <div className="flex justify-between items-center bg-white p-3 rounded-md
                          hover:bg-blue-50 transition my-1 shadow-sm">
-                            <span className="font-medium text-gray-800">
+                            <span className="text-gray-700">
                                 {u.universityName}
                             </span>
                             <button className="text-blue-500 hover:underline text-sm cursor-pointer">

@@ -1,5 +1,5 @@
 export async function getUniversities() {
-    const res = await fetch(`${process.env.SITE_URL}/api/universities`, {
+    const res = await fetch(`${process.env.FRONTEND_URL}/api/universities`, {
         headers: {
             "x-internal-key": process.env.INTERNAL_SECRET_KEY!,
         },
