@@ -2,56 +2,16 @@ import Container from "@/components/ui/container";
 import { UOSelectBox } from "@/components/common/UOSelectBox";
 import { Search } from "lucide-react";
 import MajorGroupList from "@/app/(user)/majors/MajorGroupList";
+import { getMajorGroups } from "@/lib/services/majorServices";
 
-// Dữ liệu có thể fetch từ backend, nhưng tạm hardcode
-const majorGroups = [
-    {
-        id: 1,
-        name: "Kỹ thuật - Công nghệ",
-        majors: [
-            "Kỹ thuật phần mềm",
-            "Khoa học máy tính",
-            "Công nghệ thông tin",
-            "Hệ thống thông tin",
-            "An toàn thông tin",
-            "Trí tuệ nhân tạo",
-        ],
-    },
-    {
-        id: 2,
-        name: "Kinh tế - Quản lý",
-        majors: [
-            "Kinh tế học",
-            "Quản trị kinh doanh",
-            "Marketing",
-            "Tài chính - Ngân hàng",
-            "Kế toán",
-        ],
-    },
-    {
-        id: 3,
-        name: "Khoa học Xã hội & Nhân văn",
-        majors: [
-            "Tâm lý học",
-            "Xã hội học",
-            "Báo chí",
-            "Ngôn ngữ Anh",
-            "Ngôn ngữ Trung Quốc",
-        ],
-    },
-    {
-        id: 4,
-        name: "Giáo dục - Sư phạm",
-        majors: [
-            "Giáo dục tiểu học",
-            "Sư phạm Toán học",
-            "Sư phạm Ngữ văn",
-            "Sư phạm Anh",
-        ],
-    },
-];
 
-export default function MajorPage() {
+
+
+export default async function MajorPage() {
+
+    const majorGroups_ = await getMajorGroups();
+
+
     return (
         <Container>
             <div className="min-h-screen py-6">
@@ -79,7 +39,7 @@ export default function MajorPage() {
                 </div>
 
                 {/* Danh sách nhóm ngành */}
-                <MajorGroupList groups={majorGroups} />
+                <MajorGroupList groups={majorGroups_} />
             </div>
         </Container>
     );

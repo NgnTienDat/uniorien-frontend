@@ -14,6 +14,13 @@ export const API = axios.create({
     withCredentials: true,
 });
 
+export const NEXT_API = axios.create({
+    baseURL: process.env.FRONTEND_URL,
+    headers: {
+        "x-internal-key": process.env.INTERNAL_SECRET_KEY!,
+    },
+});
+
 export const API_AUTH = axios.create({
     baseURL: BASE_URL,
     headers: { "Content-Type": "application/json" },
