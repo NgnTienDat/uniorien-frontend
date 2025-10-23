@@ -1,13 +1,12 @@
-import { cookies } from "next/headers";
+import { SPRING_API } from "@/lib/axiosConfig";
 
 
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const response = await fetch(`${process.env.BACKEND_URL}/uni/`);
   
-  const data = await response.json();
-  return NextResponse.json(data);
+  const response = await SPRING_API.get("/uni/");
+  return NextResponse.json(response.data);
 }
 
 

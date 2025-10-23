@@ -2,14 +2,14 @@ import Container from "@/components/ui/container";
 import { UOSelectBox } from "@/components/common/UOSelectBox";
 import { Search } from "lucide-react";
 import MajorGroupList from "@/app/(user)/majors/MajorGroupList";
-import { getMajorGroups } from "@/lib/services/majorServices";
+import { getMajorGroups } from "@/services/majorServices";
 
 
 
 
 export default async function MajorPage() {
 
-    const majorGroups_ = await getMajorGroups();
+    const majorGroups = await getMajorGroups();
 
 
     return (
@@ -39,7 +39,7 @@ export default async function MajorPage() {
                 </div>
 
                 {/* Danh sách nhóm ngành */}
-                <MajorGroupList groups={majorGroups_} />
+                <MajorGroupList groups={majorGroups} />
             </div>
         </Container>
     );
