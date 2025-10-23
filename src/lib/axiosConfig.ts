@@ -8,11 +8,14 @@ import {
 } from "@/lib/token";
 import { BASE_URL } from "@/lib/constant";
 
-export const API = axios.create({
-    baseURL: BASE_URL,
-    headers: { "Content-Type": "application/json" },
-    withCredentials: true,
+
+
+
+
+export const SPRING_API = axios.create({
+    baseURL: process.env.BACKEND_URL,
 });
+
 
 export const NEXT_API = axios.create({
     baseURL: process.env.FRONTEND_URL,
@@ -21,11 +24,12 @@ export const NEXT_API = axios.create({
     },
 });
 
+
 export const API_AUTH = axios.create({
-    baseURL: BASE_URL,
-    headers: { "Content-Type": "application/json" },
-    withCredentials: true,
+    baseURL: process.env.BACKEND_URL,
 });
+
+
 
 // Request Interceptor: thêm token vào header
 API_AUTH.interceptors.request.use(
@@ -37,7 +41,7 @@ API_AUTH.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-// 🧩 Response Interceptor: tự refresh token nếu bị 401
+// Response Interceptor: tự refresh token nếu bị 401
 API_AUTH.interceptors.response.use(
     (response) => response,
     async (error) => {

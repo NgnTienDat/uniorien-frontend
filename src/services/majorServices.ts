@@ -11,3 +11,4 @@ export async function getMajorGroups() {
 
     return res.data.result;
 }
+
