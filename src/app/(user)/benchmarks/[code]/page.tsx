@@ -1,15 +1,20 @@
-import AdmissionList from "@/app/(user)/benchmarks/[id]/AdmissionList";
+import AdmissionList from "@/app/(user)/benchmarks/[code]/AdmissionList";
 import Container from "@/components/ui/container";
 import { getDetailUniversityAdmission } from "@/services/universityServices";
 import Link from "next/link";
 
 export default async function UniversityAdmission({
     params,
+    searchParams,
 }: {
-    params: Promise<{ id: string }>;
+    params: Promise<{ code: string }>;
+    searchParams: Promise<{ year?: string; admissionMethod?: string }>;
 }) {
-    const { id } = await params;
-    const admissionDetails = await getDetailUniversityAdmission(id);
+    const { code } = await params;
+    const { year, admissionMethod } = await searchParams;
+
+    const admissionDetails = await getDetailUniversityAdmission(code, year, admissionMethod);
+
 
     return (
         <Container>
@@ -45,22 +50,25 @@ export default async function UniversityAdmission({
                 </div>
 
                 <div className="bg-white py-3 px-4 rounded-lg mb-6 shadow-sm border border-gray-200">
-                    <h4 className="font-semibold text-lg mb-2 text-gray-700">
-                        Các phương thức xét tuyển
-                    </h4>
-                     {admissionDetails?.admissionList ? (
-                    <div className="text-blue-500 text-lg space-y-0.5 font-semibold">
-                        {admissionDetails.admissionList.map((item, index) => (
-                            <p key={index}>{item.admissionMethod}</p>
-                        ))}
-                    </div>
-                ) : (
-                    <p className="text-gray-500 italic mt-2">
-                        Thông tin xét tuyển sẽ sớm được cập nhật.
-                    </p>
-                )}
+
+                    {admissionDetails?.admissionList?.length > 0 ? (
+                        <div>
+                            <h4 className="font-semibold text-lg mb-2 text-gray-700">
+                                Các phương thức xét tuyển
+                            </h4>
+                            <div className="text-blue-500 text-lg space-y-0.5 font-semibold">
+                                {admissionDetails.admissionList.map((item, index) => (
+                                    <p key={index}>{item.admissionMethod}</p>
+                                ))}
+                            </div>
+                        </div>
+                    ) : (
+                        <p className="text-gray-500 italic mt-2">
+                            Thông tin xét tuyển sẽ sớm được cập nhật.
+                        </p>
+                    )}
                 </div>
-               
+
 
                 {/* Danh sách phương thức xét tuyển và điểm chuẩn */}
                 {admissionDetails?.admissionList ? (
