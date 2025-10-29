@@ -13,12 +13,12 @@ import { BASE_URL } from "@/lib/constant";
 
 
 export const SPRING_API = axios.create({
-    baseURL: process.env.BACKEND_URL,
+    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
 });
 
 
 export const NEXT_API = axios.create({
-    baseURL: process.env.FRONTEND_URL,
+    baseURL: process.env.NEXT_PUBLIC_FRONTEND_URL,
     headers: {
         "x-internal-key": process.env.INTERNAL_SECRET_KEY!,
     },
