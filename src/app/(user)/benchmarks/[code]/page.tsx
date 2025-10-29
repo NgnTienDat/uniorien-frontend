@@ -58,7 +58,7 @@ export default async function UniversityAdmission({
                             </h4>
                             <div className="text-blue-500 text-lg space-y-0.5 font-semibold">
                                 {admissionDetails.admissionList.map((item, index) => (
-                                    <p key={index}>{item.admissionMethod}</p>
+                                    <p key={index}>{item.admissionMethod} {item.admissionYear}</p>
                                 ))}
                             </div>
                         </div>
@@ -72,7 +72,10 @@ export default async function UniversityAdmission({
 
                 {/* Danh sách phương thức xét tuyển và điểm chuẩn */}
                 {admissionDetails?.admissionList ? (
-                    <AdmissionList admissionList={admissionDetails.admissionList} />
+                    <AdmissionList
+                        admissionList={admissionDetails.admissionList}
+                        universityCode={admissionDetails.universityCode}
+                    />
                 ) : null}
 
 
