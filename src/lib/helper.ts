@@ -8,4 +8,5 @@ export const springEndpoint = {
     UNIVERSITY_LIST: "/uni/",
     UNIVERSITY_BENCHMARKS: "/uni/benchmarks/",
     MAJORS_LIST: "/majors/major-groups",
+    MAJORS_SEARCH: "/majors/filter",
 }

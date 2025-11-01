@@ -24,7 +24,7 @@ export default function AdmissionList({
         index: number
     ) => {
         const prevYear = (Number(currentYearToLoad) - 1).toString();
-        
+
         setLoadingStates(prev => ({ ...prev, [index]: true }));
 
         try {
@@ -137,8 +137,7 @@ export default function AdmissionList({
                             >
                                 {loadingStates[i]
                                     ? "Đang tải..."
-                                    : `Xem ${admission.admissionMethod} năm ${
-                                        Number(getNextYearToLoad(admission, i)) - 1
+                                    : `Xem ${admission.admissionMethod} năm ${Number(getNextYearToLoad(admission, i)) - 1
                                     }`}
                             </button>
                         )}

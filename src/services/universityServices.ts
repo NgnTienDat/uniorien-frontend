@@ -65,6 +65,8 @@ export async function getDetailUniversityAdmission(
 ): Promise<UniversityAdmissionDetail> {
   const isServer = typeof window === "undefined";
 
+  // isServer is checked to determine which API instance to use. If it's server-side, NEXT_API is used; client-side, SPRING_API is used.
+
   console.log("isServer:", isServer);
   console.log("Fetching admission details for:", { code, year, admissionMethod });
 
@@ -81,7 +83,7 @@ export async function getDetailUniversityAdmission(
       throw new Error(res.data.message || "Unknown API error");
     }
 
-    
+
 
     return res.data.result;
   } catch (error) {
@@ -93,4 +95,3 @@ export async function getDetailUniversityAdmission(
     throw new Error(message);
   }
 }
-
