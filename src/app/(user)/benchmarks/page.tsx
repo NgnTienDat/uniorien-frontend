@@ -1,8 +1,6 @@
-import { UOSelectBox } from "@/components/common/UOSelectBox";
 import Container from "@/components/ui/container";
-import UniversityList from "@/app/(user)/benchmarks/UniversityList";
 import { getUniversities } from "@/services/universityServices";
-import { Search } from "lucide-react";
+import BenchmarkClient from "./BenchmarkClient";
 
 export const metadata = {
   title: "Tra cứu điểm chuẩn đại học năm 2025 | UniBenchmarks",
@@ -26,25 +24,7 @@ export default async function BenchmarkPage() {
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-6">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Nhập tên trường đại học"
-              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none bg-white"
-            />
-          </div>
-          <UOSelectBox />
-        </div>
-
-        {universities.length > 0 ? (
-          <UniversityList universities={universities} />
-        ) : (
-          <p className="text-center text-gray-500">
-            Không có dữ liệu trường đại học nào.
-          </p>
-        )}
+        <BenchmarkClient universities={universities} />
       </div>
     </Container>
   );
