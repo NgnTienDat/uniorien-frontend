@@ -25,19 +25,22 @@ export default function MajorGroupList({ groups }: MajorGroupListProps) {
             {groups.map((group) => (
                 <div
                     key={group.id}
-                    className={`border rounded-lg overflow-hidden transition-shadow space-y-1 ${openGroup === group.id
-                        ? "shadow-md my-5 border-gray-500 border-3"
+                    className={`border rounded-lg  shadow-md overflow-hidden transition-shadow space-y-1 ${openGroup === group.id
+                        ? "shadow-lg my-5"
                         : "bg-white border-gray-200 hover:shadow-md"
                         }`}
                 >
 
                     <button
                         onClick={() => toggleGroup(group.id)}
-                        className={`w-full flex justify-between items-center px-4 py-3 text-left hover:bg-blue-50
-                            ${openGroup === group.id ? "mb-3 hover:bg-gray-300 bg-gray-300" : ""}`
+                        className={`w-full flex justify-between items-center px-4 py-3 text-left hover:bg-blue-50 
+                            ${openGroup === group.id ? "mb-3 bg-blue-200 hover:bg-blue-200 " : ""}`
                         }
                     >
-                        <span className="text-gray-800">{group.majorGroupName}</span>
+                        <span className={`${openGroup === group.id
+                        ? "text-blue-500 font-semibold"
+                        : "text-blue-800"
+                        }`}>{group.majorGroupName}</span>
                         <div className="flex items-center gap-2 text-sm text-gray-600">
                             <span>[{group.majors.length} ngành]</span>
                             {openGroup === group.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}

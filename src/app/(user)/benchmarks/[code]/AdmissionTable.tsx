@@ -16,8 +16,8 @@ interface AdmissionTableProps {
 
 export default function AdmissionTable({ benchmarkList }: AdmissionTableProps) {
     return (
-        <div className="overflow-x-auto">
-            <table className="min-w-full border border-gray-300 bg-white rounded-lg text-sm md:text-base">
+        <div className="overflow-x-auto shadow-xl">
+            <table className="min-w-full border border-gray-300 bg-white rounded-lg text-sm md:text-base ">
                 <thead className="bg-blue-50">
                     <tr>
                         <th className="border border-gray-300 px-3 py-1 text-left w-16">STT</th>
@@ -42,7 +42,7 @@ export default function AdmissionTable({ benchmarkList }: AdmissionTableProps) {
                                 {b.majorCode || "-"}
                             </td>
                             <td className="border border-gray-300 px-3 py-1 text-gray-700 break-words">
-                                {b.major?.split(" - ")[1] || b.major}
+                                {b.major}
                             </td>
                             <td className="border border-gray-300 px-3 py-1 text-gray-600">
                                 {b.subjectCombinations || "-"}

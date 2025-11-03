@@ -9,7 +9,7 @@ interface MajorListProps {
 
 export default function MajorList({ majors }: MajorListProps) {
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 px-4 pb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 px-4 pb-4 ">
             {majors.map((m) => (
                 <Link
                     href={`/majors/${encodeURIComponent(m)}`}

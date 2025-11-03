@@ -6,10 +6,10 @@ import { Search } from "lucide-react";
 import { useState, useMemo } from "react";
 
 type University = {
-  id: string;
-  universityCode: string;
-  universityName: string;
-  website: string;
+    id: string;
+    universityCode: string;
+    universityName: string;
+    website: string;
 };
 
 export default function BenchmarkClient({ universities }: { universities: University[] }) {
