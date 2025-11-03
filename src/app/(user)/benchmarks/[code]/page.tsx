@@ -16,6 +16,7 @@ export default async function UniversityAdmission({
     const admissionDetails = await getDetailUniversityAdmission(code, year, admissionMethod);
 
 
+
     return (
         <Container>
             <div className="min-h-screen py-6">

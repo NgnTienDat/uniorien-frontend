@@ -3,24 +3,33 @@
 import { OAuthConfig } from "@/lib/helper";
 import { setAccessToken } from "@/lib/token";
 import { loginOauth } from "@/services/authServices";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-
 
 export function useGoogleLogin() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { isPending, mutate: googleLogin } = useMutation({
     mutationFn: (code: string) => loginOauth(code),
-    onSuccess: (user: any) => {
-      console.log("token oauth: ", user);
-      setAccessToken(user.token);
+
+    onSuccess: (data) => {
+      if (!data) return;
+
+      console.log("token oauth: ", data);
+
+      setAccessToken(data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      queryClient.setQueryData(['user'], data.user);
+      queryClient.setQueryData(['auth'], data);
+
       router.push("/");
     },
+
     onError: (err: any) => {
       router.push("/");
       console.error(err);
-    //   toast.error(err.response?.data?.message || "Đăng nhập thất bại");
+      //   toast.error(err.response?.data?.message || "Đăng nhập thất bại");
     },
   });
 
@@ -35,12 +44,7 @@ export function useGoogleLogin() {
       const authUrl = OAuthConfig.authUri;
       const googleClientId = OAuthConfig.clientId;
 
-
-      console.log("callback url: ", callbackUrl)
-      console.log("callback url: ", authUrl)
-      console.log("callback url: ", googleClientId)
-
-       if (!authUrl || !googleClientId) {
+      if (!authUrl || !googleClientId) {
         console.error("OAuth configuration is missing authUri or clientId");
         return;
       }
@@ -49,12 +53,12 @@ export function useGoogleLogin() {
         callbackUrl
       )}&response_type=code&client_id=${googleClientId}&scope=openid%20email%20profile`;
 
-      console.log("targetUrl: ", targetUrl)
+      console.log("targetUrl: ", targetUrl);
 
       window.location.href = targetUrl;
     } catch (err: any) {
-    //   toast.error(err.message);
-        console.error("Loi dang nhap GG: ", err.message)
+      //   toast.error(err.message);
+      console.error("Loi dang nhap GG: ", err.message);
     }
   }
 
@@ -62,6 +66,19 @@ export function useGoogleLogin() {
 }
 
 export default useGoogleLogin;
+
+
+
+
+
+
+
+
+
+
+
+
+
 // export function useGoogleLogin() {
 //   const router = useRouter();
 //   const searchParams = useSearchParams();
@@ -80,7 +97,7 @@ export default useGoogleLogin;
 //     onSuccess: (user: { token: string }) => {
 //       console.log("token oauth:", user);
 //       setAccessToken(user.token);
-//       router.push("/"); 
+//       router.push("/");
 //     },
 //     onError: (err: any) => {
 //       router.push("/auth/login");

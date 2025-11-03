@@ -8,13 +8,17 @@ import Link from "next/link";
 import { Menu } from "lucide-react";
 import { UOButton } from "@/components/common/UOButton";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/hooks/useUser";
 
 export default function UserHeader() {
+    const { user, isAuthenticated, isAdmin } = useUser();
     const [menuOpen, setMenuOpen] = useState(false);
     const router = useRouter();
 
+    // console.log("User in UserHeader: ", user);
+
     return (
-        <header className="bg-white border-b border-gray-200 px-4 md:px-10 py-3 flex items-center justify-between relative z-50">
+        <header className="bg-white border-b border-gray-200 px-4 md:px-10 py-3 flex items-center shadow-lg justify-between relative z-50">
             {/* Left section: Hamburger + Logo */}
             <div className="flex items-center gap-6">
                 <div className="flex items-center gap-3 mr-4">
@@ -26,7 +30,6 @@ export default function UserHeader() {
                         <Menu size={22} />
                     </button>
 
-                    {/* Logo */}
                     <Link href="/" className="text-2xl font-semibold text-blue-600">
                         UniOrien
                     </Link>
@@ -52,13 +55,12 @@ export default function UserHeader() {
             </div>
             <div className="flex space-x-1">
 
+                {isAuthenticated ? (
+                    <UOButton name={"Xin chào, " + (user?.fullName || "Người dùng")} href="/profile" />
+                ) : 
+                <UOButton name={"Đăng nhập"} href="/login" />
 
-            <UOButton name={"Đăng nhập"} />
-
-            {/* <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-            </Avatar> */}
+                }
             </div>
 
             {/* Mobile sidebar */}

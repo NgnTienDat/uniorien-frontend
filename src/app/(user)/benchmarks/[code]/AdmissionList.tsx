@@ -17,6 +17,8 @@ export default function AdmissionList({
     const [loadingStates, setLoadingStates] = useState<Record<number, boolean>>({});
     const [previousYearDataMap, setPreviousYearDataMap] = useState<Record<number, Admission[]>>({});
     const [noMoreDataFlags, setNoMoreDataFlags] = useState<Record<number, boolean>>({});
+    console.log("Admission Details:", admissionList);
+
 
     const handleViewPreviousYear = async (
         admissionMethod: string,
@@ -78,9 +80,9 @@ export default function AdmissionList({
     return (
         <div className="space-y-10">
             {admissionList.map((admission, i) => (
-                <div key={i}>
+                <div key={i} className="mb-17">
                     {/* Current Year Section */}
-                    <div className="bg-amber-300 p-2 rounded-t-lg">
+                    <div className="bg-blue-200 p-2 rounded-t-md ">
                         <h2 className="text-lg md:text-xl font-semibold text-gray-800">
                             {admission.admissionMethod} - Năm {admission.admissionYear}
                         </h2>
@@ -93,7 +95,7 @@ export default function AdmissionList({
                         <div className="mt-6 space-y-6">
                             {previousYearDataMap[i].map((prevData, yearIndex) => (
                                 <div key={yearIndex} className="border-t-4 border-gray-300 pt-6">
-                                    <div className="bg-amber-200 p-2 rounded-t-lg flex justify-between items-center">
+                                    <div className="bg-blue-200 p-2 rounded-t-lg flex justify-between items-center">
                                         <h3 className="text-lg md:text-xl font-semibold text-gray-800">
                                             {prevData.admissionMethod} - Năm {prevData.admissionYear}
                                         </h3>
@@ -113,7 +115,7 @@ export default function AdmissionList({
                         </div>
                     )}
 
-                    <div className="mt-3 flex justify-end gap-2">
+                    <div className="mt-5 flex justify-center gap-2">
                         {previousYearDataMap[i] && previousYearDataMap[i].length > 0 && (
                             <button
                                 onClick={() => handleClosePreviousYear(i)}
