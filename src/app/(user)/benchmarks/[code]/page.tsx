@@ -59,7 +59,7 @@ export default async function UniversityAdmission({
                             </h4>
                             <div className="text-blue-500 text-lg space-y-0.5 font-semibold">
                                 {admissionDetails.admissionList.map((item, index) => (
-                                    <p key={index}>{item.admissionMethod} {item.admissionYear}</p>
+                                    <p key={index}>{item.admissionMethod}</p>
                                 ))}
                             </div>
                         </div>

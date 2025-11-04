@@ -1,45 +1,32 @@
 'use client';
 
-import { UOSelectBox } from "@/components/common/UOSelectBox";
 import UniversityList from "@/app/(user)/benchmarks/UniversityList";
-import { Search } from "lucide-react";
-import { useState, useMemo } from "react";
+import SearchInput from "@/components/SearchInput";
+import { UOSelectBox } from "@/components/UOSelectBox";
+import { useUniversityFilter } from "@/hooks/useUniversityFilter";
 
 type University = {
     id: string;
     universityCode: string;
     universityName: string;
-    website: string;
 };
 
 export default function BenchmarkClient({ universities }: { universities: University[] }) {
-    const [searchTerm, setSearchTerm] = useState("");
-
-    const filtered = useMemo(() => {
-        return universities.filter(university =>
-            university.universityCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            university.universityName.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-    }, [universities, searchTerm]);
+    const { searchTerm, setSearchTerm, filteredUniversities } = useUniversityFilter(universities);
 
     return (
         <>
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-6">
-                <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    <input
-                        type="text"
-                        placeholder="Nhập tên trường đại học"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none bg-white"
-                    />
-                </div>
+                <SearchInput
+                    value={searchTerm}
+                    onChange={setSearchTerm}
+                    placeholder="Nhập tên trường đại học"
+                />
                 <UOSelectBox />
             </div>
 
-            {filtered.length > 0 ? (
-                <UniversityList universities={filtered} />
+            {filteredUniversities.length > 0 ? (
+                <UniversityList universities={filteredUniversities} />
             ) : (
                 <p className="text-center text-gray-500">
                     {searchTerm.trim()

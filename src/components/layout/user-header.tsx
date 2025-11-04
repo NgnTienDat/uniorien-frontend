@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { UONavigationMenu } from "@/components/common/UONavigationMenu";
-import { UOMobileSidebar } from "@/components/common/UOMobileSidebar";
+import { UONavigationMenu } from "@/components/UONavigationMenu";
+import { UOMobileSidebar } from "@/components/UOMobileSidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Menu } from "lucide-react";
-import { UOButton } from "@/components/common/UOButton";
+import { UOButton } from "@/components/UOButton";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/hooks/useUser";
 
@@ -57,8 +57,8 @@ export default function UserHeader() {
 
                 {isAuthenticated ? (
                     <UOButton name={"Xin chào, " + (user?.fullName || "Người dùng")} href="/profile" />
-                ) : 
-                <UOButton name={"Đăng nhập"} href="/login" />
+                ) :
+                    <UOButton name={"Đăng nhập"} href="/login" />
 
                 }
             </div>

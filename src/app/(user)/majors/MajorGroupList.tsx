@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Layers } from "lucide-react";
 import MajorList from "./MajorList";
 
 interface MajorGroupListProps {
     groups: {
         id: number;
         majorGroupName: string;
-        numberOfMajors: number;
         majors: string[];
     }[];
 }
@@ -22,34 +21,49 @@ export default function MajorGroupList({ groups }: MajorGroupListProps) {
 
     return (
         <div className="space-y-1">
-            {groups.map((group) => (
-                <div
-                    key={group.id}
-                    className={`border rounded-lg  shadow-md overflow-hidden transition-shadow space-y-1 ${openGroup === group.id
-                        ? "shadow-lg my-5"
-                        : "bg-white border-gray-200 hover:shadow-md"
-                        }`}
-                >
-
-                    <button
-                        onClick={() => toggleGroup(group.id)}
-                        className={`w-full flex justify-between items-center px-4 py-3 text-left hover:bg-blue-50 
-                            ${openGroup === group.id ? "mb-3 bg-blue-200 hover:bg-blue-200 " : ""}`
-                        }
+            {groups.map((group) => {
+                const isOpen = openGroup === group.id;
+                return (
+                    <div
+                        key={group.id}
+                        className={`border rounded-md bg-white shadow-sm transition-all duration-300 ${isOpen ? "ring-1 ring-blue-300 shadow-md" : "hover:shadow-md"
+                            }`}
                     >
-                        <span className={`${openGroup === group.id
-                        ? "text-blue-500 font-semibold"
-                        : "text-blue-800"
-                        }`}>{group.majorGroupName}</span>
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                            <span>[{group.majors.length} ngành]</span>
-                            {openGroup === group.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                        </div>
-                    </button>
+                        <button
+                            onClick={() => toggleGroup(group.id)}
+                            className={`w-full flex justify-between items-center px-5 py-3 text-left rounded-t-md transition-colors duration-200
+                                 ${isOpen ? "bg-blue-50 mb-3" : "hover:bg-gray-50 hover:rounded-md"
+                                }`}
+                        >
+                            <div className="flex items-center gap-2">
+                                <Layers className={`w-5 h-5 ${isOpen ? "text-blue-500" : "text-gray-500"}`} />
+                                <span
+                                    className={`font-medium ${isOpen ? "text-blue-600" : "text-blue-800"
+                                        }`}
+                                >
+                                    {group.majorGroupName}
+                                </span>
+                            </div>
+                            <div className="flex items-center gap-2 text-sm text-blue-500">
+                                <span>({group.majors.length} ngành)</span>
+                                {isOpen ? (
+                                    <ChevronUp size={18} className="text-blue-500" />
+                                ) : (
+                                    <ChevronDown size={18} />
+                                )}
+                            </div>
+                        </button>
 
-                    {openGroup === group.id && <MajorList majors={group.majors} />}
-                </div>
-            ))}
+                        {/* Danh sách ngành */}
+                        <div
+                            className={`overflow-hidden transition-all duration-300 ${isOpen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                                }`}
+                        >
+                            <MajorList majors={group.majors} />
+                        </div>
+                    </div>
+                );
+            })}
         </div>
     );
 }

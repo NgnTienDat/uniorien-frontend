@@ -6,7 +6,6 @@ export interface University {
   id: string;
   universityCode: string;
   universityName: string;
-  website: string;
 }
 
 export interface Benchmark {
