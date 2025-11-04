@@ -1,5 +1,5 @@
 import MajorSearchList from "@/app/(user)/majors/[major]/MajorSearchList";
-import { UOSelectBox } from "@/components/common/UOSelectBox";
+import { UOSelectBox } from "@/components/UOSelectBox";
 import Container from "@/components/ui/container";
 import { getMajorRelatedMajorSearching } from "@/services/majorServices";
 
@@ -15,8 +15,8 @@ export default async function MajorSearchPage({
     const { major } = await params;
     const { admissionMethod, location } = await searchParams;
 
-    
-    
+
+
     const decodedMajor = decodeURIComponent(major);
     console.log("MajorSearchPage params:", decodedMajor);
 

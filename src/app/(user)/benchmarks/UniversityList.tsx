@@ -11,7 +11,7 @@ interface UniversityListProps {
 
 export default function UniversityList({ universities }: UniversityListProps) {
   return (
-    <ScrollArea className="h-[400px] rounded-md border p-2">
+    <ScrollArea className="h-[400px] rounded-md p-2 shadow-sm">
       <div className="p-2">
         {universities.map((u) => (
           <div
@@ -19,7 +19,7 @@ export default function UniversityList({ universities }: UniversityListProps) {
             className="flex justify-between items-center bg-white p-3 rounded-md
             hover:bg-blue-50 transition my-1 shadow-sm"
           >
-            <span className="text-gray-700">{u.universityName}</span>
+            <span className="text-blue-800">{u.universityName}</span>
             <Link
               href={`/benchmarks/${u.universityCode}`}
               className="text-blue-500 hover:underline text-sm cursor-pointer"

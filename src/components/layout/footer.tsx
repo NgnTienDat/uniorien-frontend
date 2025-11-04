@@ -49,7 +49,8 @@ const Footer: React.FC = () => {
                             </a>
                         </div>
                         <p className="mt-4">
-                            Email: tie.dat.2004@gmail.com
+                            Email: 
+                            <span className="text-blue-600">{" "}tie.dat2004@gmail.com</span>
                         </p>
                     </div>
 
