@@ -26,7 +26,7 @@ export const NEXT_API = axios.create({
 
 
 export const API_AUTH = axios.create({
-    baseURL: process.env.BACKEND_URL,
+    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
 });
 
 
@@ -60,7 +60,7 @@ API_AUTH.interceptors.response.use(
 
             try {
                 const res = await axios.post(
-                    `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api"}/auth/refresh`,
+                    `${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080/api"}/auth/refresh`,
                     { refreshToken }
                 );
 

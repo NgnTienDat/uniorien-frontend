@@ -9,11 +9,13 @@ import { Menu } from "lucide-react";
 import { UOButton } from "@/components/UOButton";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/hooks/useUser";
+import useLogout from "@/hooks/useLogout";
 
 export default function UserHeader() {
     const { user, isAuthenticated, isAdmin } = useUser();
     const [menuOpen, setMenuOpen] = useState(false);
     const router = useRouter();
+    const { logout } = useLogout();
 
     // console.log("User in UserHeader: ", user);
 
@@ -56,11 +58,11 @@ export default function UserHeader() {
             <div className="flex space-x-1">
 
                 {isAuthenticated ? (
-                    <UOButton name={"Xin chào, " + (user?.fullName || "Người dùng")} href="/profile" />
-                ) :
-                    <UOButton name={"Đăng nhập"} href="/login" />
+                    <UOButton name="Đăng xuất" onClick={() => logout()} />
+                ) : (
+                    <UOButton name="Đăng nhập" href="/login" />
+                )}
 
-                }
             </div>
 
             {/* Mobile sidebar */}
