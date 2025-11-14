@@ -3,10 +3,13 @@
 import { useState } from 'react';
 import { Star } from 'lucide-react';
 import { CommentResponse, Review } from '@/types/review';
+import { formatDate } from '@/lib/utils';
+import { useComment } from '@/hooks/useComment';
 
 
 interface ReviewSectionProps {
     universityCode: string;
+    universityId: string;
     initialReviews: CommentResponse[];
 }
 
@@ -19,23 +22,28 @@ function renderStars(rating: number, size = 'w-5 h-5') {
     ));
 }
 
-export function ReviewSection({ universityCode, initialReviews }: ReviewSectionProps) {
+export function ReviewSection({ universityCode, universityId, initialReviews }: ReviewSectionProps) {
     const [reviews, setReviews] = useState<CommentResponse[]>(initialReviews);
+    const { comments, addComment, isAdding } = useComment(universityCode, universityId);
     const [formData, setFormData] = useState({
-        name: '',
+        universityId: universityId,
         content: ''
     });
 
+    console.log("universityId in ReviewSection:", universityId);
+
 
     const handleSubmit = async () => {
-        if (formData.content) {
-            // In a real app, you would POST to an API route here
-            // const response = await fetch(`/api/universities/${universityId}/reviews`, {
-            //   method: 'POST',
-            //   body: JSON.stringify(formData)
-            // });
-            console.log("uni code: ", universityCode);
-           
+        if (!formData.content) return;
+
+        try {
+            await addComment(formData.content);
+            setFormData({ ...formData, content: '' });
+            // Refresh reviews after adding a new comment
+            const updatedComments = comments;
+            setReviews(updatedComments || []);
+        } catch (err) {
+            console.error(err);
         }
     };
 
@@ -60,7 +68,7 @@ export function ReviewSection({ universityCode, initialReviews }: ReviewSectionP
 
                 <button
                     onClick={handleSubmit}
-                    className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-2.5 rounded-lg transition-colors"
+                    className="w-full bg-blue-600 hover:bg-gray-800 text-white font-medium py-2.5 rounded-lg transition-colors"
                 >
                     Submit Review
                 </button>
@@ -77,7 +85,7 @@ export function ReviewSection({ universityCode, initialReviews }: ReviewSectionP
                             <div className="flex-1">
                                 <div className="flex items-center justify-between mb-2">
                                     <h4 className="font-medium text-gray-900">{review.fullName}</h4>
-                                    <span className="text-sm text-gray-500">{review.createdAt}</span>
+                                    <span className="text-sm text-gray-500">{formatDate(review.createdAt)}</span>
                                 </div>
                                 {/* <div className="flex mb-3">
                                     {renderStars(review.rating, 'w-4 h-4')}

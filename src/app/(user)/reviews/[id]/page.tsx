@@ -3,7 +3,7 @@ import { UniversityAbout } from "@/app/(user)/reviews/[id]/UniversityAbout";
 import { UniversityCampus } from "@/app/(user)/reviews/[id]/UniversityCampus";
 import { UniversityHeader } from "@/app/(user)/reviews/[id]/UniversityHeader";
 import Container from "@/components/ui/container";
-import { getUniversityComments } from "@/services/reviewServices";
+import { getUniversityComments, getUniversityDetail } from "@/services/reviewServices";
 
 // This would typically come from a database or API
 async function getUniversityData(id: string) {
@@ -29,34 +29,7 @@ async function getUniversityData(id: string) {
     };
 }
 
-async function getReviews(universityId: string) {
-    return [
-        {
-            id: 1,
-            name: "Emily Johnson",
-            rating: 5,
-            date: "2024-10-15",
-            review: "Stanford exceeded all my expectations! The faculty is world-class, and the opportunities for research and innovation are unparalleled. The campus is beautiful, and the collaborative culture among students is amazing.",
-            avatar: "EJ"
-        },
-        {
-            id: 2,
-            name: "Michael Chen",
-            rating: 4,
-            date: "2024-09-28",
-            review: "Great academic programs and resources. The proximity to Silicon Valley opens up incredible internship opportunities. The only downside is the intense competition, but it pushes you to grow.",
-            avatar: "MC"
-        },
-        {
-            id: 3,
-            name: "Sarah Martinez",
-            rating: 5,
-            date: "2024-09-10",
-            review: "The Computer Science program here is outstanding. The professors are leaders in their fields, and the entrepreneurial spirit on campus is infectious. Best decision I ever made!",
-            avatar: "SM"
-        }
-    ];
-}
+
 
 export default async function UniversityPage({ 
     params 
@@ -64,8 +37,10 @@ export default async function UniversityPage({
     params: Promise<{ id: string }>
 }){
      const { id } = await params;
-    const university = await getUniversityData(id);
+    const university = await getUniversityDetail(id);
     const initialReviews = await getUniversityComments(id);
+
+    console.log("universityId in UniversityPage:", university);
 
 
     return (
@@ -76,10 +51,11 @@ export default async function UniversityPage({
                         university={university}
                         reviewCount={initialReviews.length}
                     />
-                    <UniversityAbout about={university.about} />
-                    <UniversityCampus images={university.campusImages} />
+                    <UniversityAbout about={university?.about} />
+                    <UniversityCampus images={university?.campusImages} />
                     <ReviewSection
                         universityCode={id}
+                        universityId={university.universityId}
                         initialReviews={initialReviews}
                     />
                 </div>

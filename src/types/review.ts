@@ -23,3 +23,20 @@ export interface Review {
   review: string;
   avatar: string;
 }
+
+
+export interface UniversityDetail {
+  id: string;
+  universityName: string;
+  universityId: string;
+  universityCode: string;
+  location: string;
+  websiteAddress: string;
+  about: string;
+  logo?: string;
+  rating?: number;
+  students?: number;
+  founded?: number;
+  acceptance?: string;
+  campusImages: { id: number; url: string }[];
+}
