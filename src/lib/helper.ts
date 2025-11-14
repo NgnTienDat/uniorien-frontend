@@ -27,6 +27,7 @@ export const springEndpoint = {
     ALL_UNI_REVIEW_LIST: "/api/v1/reviews/",
     ADD_COMMENT:"/api/v1/reviews/comments",
     ALL_COMMENT: (universityCode: string) => `/api/v1/reviews/${universityCode}/comments`,
+    UNIVERSITY_DETAIL: (universityCode: string) => `/api/v1/reviews/${universityCode}`,
 
 }
 
@@ -35,3 +36,6 @@ export const OAuthConfig = {
     redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URI,
     authUri: process.env.NEXT_PUBLIC_AUTH_URI
 }
+
+
+

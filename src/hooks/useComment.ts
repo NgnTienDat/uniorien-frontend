@@ -2,7 +2,7 @@ import { addUniversityComment, getUniversityComments } from "@/services/reviewSe
 import { CommentResponse } from "@/types/review";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useComment(universityCode: string) {
+export function useComment(universityCode: string, universityId: string) {
     const queryClient = useQueryClient();
 
     const {
@@ -20,8 +20,9 @@ export function useComment(universityCode: string) {
         mutateAsync: addComment,
         isPending: isAdding,
     } = useMutation({
-        mutationFn: (content: string) => addUniversityComment(content),
+        mutationFn: (content: string) => addUniversityComment(universityId, content),
         onSuccess: async () => {
+            confirm("Comment added successfully!");
             await queryClient.invalidateQueries({
                 queryKey: ["comments", universityCode],
             });
@@ -37,3 +38,4 @@ export function useComment(universityCode: string) {
         refetch,
     };
 }
+
