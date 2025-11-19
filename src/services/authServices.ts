@@ -50,6 +50,9 @@ export async function loginOauth(code: string): Promise<OAuthResult | null> {
 }
 
 export async function logoutApi(): Promise<void> {
+
+  console.log("access token: ", getAccessToken());
+
   try {
     await API_AUTH.post(`${springEndpoint.LOGOUT}`, {
       token: getAccessToken(),
