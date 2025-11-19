@@ -17,7 +17,7 @@ export default function UserHeader() {
     const router = useRouter();
     const { logout } = useLogout();
 
-    // console.log("User in UserHeader: ", user);
+    console.log("User in UserHeader: ", user);
 
     return (
         <header className="bg-white border-b border-gray-200 px-4 md:px-10 py-3 flex items-center shadow-lg justify-between relative z-50">
