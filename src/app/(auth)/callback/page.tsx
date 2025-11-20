@@ -40,7 +40,7 @@
 "use client";
 
 import Container from "@/components/ui/container";
-import useGoogleLogin from "@/hooks/useGoogleLogin";
+import { useGoogleLogin } from "@/hooks/useGoogleLogin";
 import React, { useEffect, useState } from "react";
 import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 
@@ -65,7 +65,6 @@ export default function CallBackOAuth() {
                     return;
                 }
 
-                console.log("Authorization code:", authorizationCode);
                 googleLogin(authorizationCode, {
                     onSuccess: () => {
                         if (isMounted) {

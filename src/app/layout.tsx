@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "@/styles/globals.css";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const roboto = Roboto({
   subsets: ["vietnamese"],
@@ -21,6 +23,7 @@ export default function RootLayout({
     <html lang="vi" suppressHydrationWarning>
       <body className={roboto.className}>
         <ReactQueryProvider>{children}</ReactQueryProvider>
+        <ToastContainer />
       </body>
     </html>
   );

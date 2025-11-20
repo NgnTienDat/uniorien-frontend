@@ -1,8 +1,6 @@
+// hooks/useGoogleLogin.ts - SECURE VERSION
 "use client";
 
-import { OAuthConfig } from "@/lib/helper";
-import { setAccessToken } from "@/lib/token";
-import { loginOauth } from "@/services/authServices";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
@@ -11,58 +9,63 @@ export function useGoogleLogin() {
   const queryClient = useQueryClient();
 
   const { isPending, mutate: googleLogin } = useMutation({
-    mutationFn: (code: string) => loginOauth(code),
+    mutationFn: async (code: string) => {
+      // ✅ Call Next.js API route, NOT Spring Boot directly
+      const response = await fetch('/api/auth/oauth/callback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Authentication failed');
+      }
+
+      return response.json();
+    },
 
     onSuccess: (data) => {
-      if (!data) return;
-
-      console.log("token oauth: ", data);
-
-      setAccessToken(data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      // ✅ Token is already stored in HttpOnly cookie by the server
+      // ✅ Only store non-sensitive user data in React Query
       queryClient.setQueryData(['user'], data.user);
-      queryClient.setQueryData(['auth'], data);
-
+      
       router.push("/");
+      router.refresh(); // Refresh server components
     },
 
     onError: (err: any) => {
+      console.error('Login error:', err);
+      alert("Đăng nhập thất bại")
       router.push("/");
-      console.error(err);
-      //   toast.error(err.response?.data?.message || "Đăng nhập thất bại");
     },
   });
 
   async function getOauthAuthorizationCode(): Promise<string | null> {
-    const hashParams = new URLSearchParams(window.location.search);
-    return hashParams.get("code");
+    const params = new URLSearchParams(window.location.search);
+    return params.get("code");
   }
 
   async function redirectGoogleLogin(): Promise<void> {
-    try {
-      const callbackUrl = OAuthConfig.redirectUri || "";
-      const authUrl = OAuthConfig.authUri;
-      const googleClientId = OAuthConfig.clientId;
+    const callbackUrl = process.env.NEXT_PUBLIC_REDIRECT_URI || "";
+    const authUrl = process.env.NEXT_PUBLIC_AUTH_URI;
+    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
 
-      if (!authUrl || !googleClientId) {
-        console.error("OAuth configuration is missing authUri or clientId");
-        return;
-      }
-
-      const targetUrl = `${authUrl}?redirect_uri=${encodeURIComponent(
-        callbackUrl
-      )}&response_type=code&client_id=${googleClientId}&scope=openid%20email%20profile`;
-
-      console.log("targetUrl: ", targetUrl);
-
-      window.location.href = targetUrl;
-    } catch (err: any) {
-      //   toast.error(err.message);
-      console.error("Loi dang nhap GG: ", err.message);
+    if (!authUrl || !clientId) {
+      console.error("OAuth configuration missing");
+      return;
     }
+
+    const targetUrl = `${authUrl}?redirect_uri=${encodeURIComponent(
+      callbackUrl
+    )}&response_type=code&client_id=${clientId}&scope=openid%20email%20profile`;
+
+    window.location.href = targetUrl;
   }
 
-  return { redirectGoogleLogin, getOauthAuthorizationCode, googleLogin, isPending };
+  return { 
+    redirectGoogleLogin, 
+    getOauthAuthorizationCode, 
+    googleLogin, 
+    isPending 
+  };
 }
-
-export default useGoogleLogin;

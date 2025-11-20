@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
 
         // Call Spring Boot backend
         const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/outbound/authentication?code=${code}`,
+            `${process.env.BACKEND_URL}/auth/outbound/authentication?code=${code}`,
             { method: 'POST' }
         );
 

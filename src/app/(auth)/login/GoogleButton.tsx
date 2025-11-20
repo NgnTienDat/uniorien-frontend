@@ -1,4 +1,4 @@
-import useGoogleLogin from '@/hooks/useGoogleLogin';
+import { useGoogleLogin } from '@/hooks/useGoogleLogin';
 import React from 'react'
 
 function GoogleButton() {
