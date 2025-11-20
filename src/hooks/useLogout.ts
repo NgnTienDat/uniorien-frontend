@@ -2,27 +2,26 @@
 
 import { useRouter } from "next/navigation";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { removeAccessToken } from "@/lib/token";
-import { logoutApi } from "@/services/authServices";
+import { toast } from "react-toastify";
 
 export function useLogout() {
     const router = useRouter();
     const queryClient = useQueryClient();
 
     const { mutate: logout, isPending, isError, error } = useMutation({
-        mutationFn: logoutApi,
+        mutationFn: async () => {
+            await fetch('/api/auth/logout', { method: 'POST' });
+        },
         onSuccess: () => {
-            removeAccessToken();
-            localStorage.removeItem("user");
+            queryClient.clear();
 
-            queryClient.removeQueries({ queryKey: ["user"] });
-            queryClient.removeQueries({ queryKey: ["auth"] });
-
-            router.push("/");
+            router.push('/');
+            router.refresh();
+            toast.success("Đăng xuất thành công");
         },
         onError: (err: any) => {
             console.error("Lỗi khi đăng xuất:", err);
-            // toast.error(err.message);
+            toast.error("Đăng xuất thất bại");
         },
     });
 

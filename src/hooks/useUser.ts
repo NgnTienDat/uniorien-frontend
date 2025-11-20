@@ -1,4 +1,4 @@
-// hooks/useUser.ts
+// hooks/useUser.ts - FIXED VERSION
 "use client";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -18,17 +18,23 @@ interface User {
 export function useUser() {
     const queryClient = useQueryClient();
 
-    const { data: user, isLoading } = useQuery<User | null>({
+    const { data: user, isLoading, isError } = useQuery<User | null>({
         queryKey: ['user'],
-        queryFn: () => {
-            const storedUser = localStorage.getItem('user');
-            if (storedUser) {
-                return JSON.parse(storedUser) as User;
+        queryFn: async () => {
+            // ✅ Fetch from server (verifies HttpOnly cookie)
+            const response = await fetch('/api/me', {
+                credentials: 'include', // Send cookies
+            });
+
+            if (!response.ok) {
+                return null;
             }
-            return null;
+
+            const data = await response.json();
+            return data.user || null;
         },
-        staleTime: Infinity,
-        gcTime: Infinity,
+        staleTime: 5 * 60 * 1000, // 5 minutes
+        retry: 1,
     });
 
     const isAuthenticated = !!user;
