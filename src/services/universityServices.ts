@@ -1,6 +1,6 @@
-import { NEXT_API, SPRING_API } from "@/lib/axiosConfig";
-import { nextEndpoint, springEndpoint } from "@/lib/helper";
-import { AxiosError } from "axios";
+// COMPLETED REFACTORING WITH NEXT.JS BEST PRACTICES 
+// NGUYEN TIEN DAT 21-11-2025
+import { ApiResponse } from "@/types/response";
 
 export interface University {
   id: string;
@@ -29,68 +29,148 @@ export interface UniversityAdmissionDetail {
   admissionList: Admission[];
 }
 
-interface ApiResponse<T> {
-  code: number;
-  message: string;
-  result: T;
-}
 
+
+
+// ============================================
+// SERVER-SIDE FUNCTIONS (for Server Components)
+// ============================================
+
+/**
+ * Fetch universities directly from Spring Boot
+ * Used in Server Components
+ */
 
 export async function getUniversities(): Promise<University[]> {
   try {
-    const res = await NEXT_API.get<ApiResponse<University[]>>(nextEndpoint.UNIVERSITY_LIST);
+    console.log("process.env.BACKEND_URL:", process.env.BACKEND_URL);
 
-    if (res.data.code !== 200) {
-      throw new Error(res.data.message || "API returned unsuccessful response");
+    const response = await fetch(`${process.env.BACKEND_URL}/api/v1/uni/`,
+      {
+        // Next.js caching options
+        next: {
+          revalidate: 3600, // Revalidate every hour
+          tags: ['universities'] // Tag for on-demand revalidation
+        },
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch universities: ${response.statusText}`);
     }
 
-    return res.data.result;
+    const data: ApiResponse<University[]> = await response.json();
+
+    if (data.code !== 200) {
+      throw new Error(data.message || "API returned unsuccessful response");
+    }
+
+    return data.result;
+
   } catch (error) {
-    const err = error as AxiosError<{ message?: string }>;
-    const message =
-      err.response?.data?.message ||
-      err.message ||
-      "Failed to fetch universities";
-    throw new Error(message);
+    console.error('Error fetching universities:', error);
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "Failed to fetch universities"
+    );
+  }
+}
+
+/**
+ * Fetch university admission details from Spring Boot (SERVER-SIDE)
+ * Used in Server Components for initial page load
+ */
+export async function getUniversityAdmissionDetails(
+  code: string,
+  year?: string,
+  admissionMethod?: string
+): Promise<UniversityAdmissionDetail> {
+  try {
+    // Build query params
+    const params = new URLSearchParams();
+    if (year) params.append('year', year);
+    if (admissionMethod) params.append('admissionMethod', admissionMethod);
+
+    const queryString = params.toString();
+    const url = `${process.env.BACKEND_URL}/api/v1/uni/benchmarks/${code}${queryString ? `?${queryString}` : ''}`;
+
+    const response = await fetch(url, {
+      next: {
+        revalidate: 86400, // Revalidate once per day
+        tags: ['admissions', `admission-${code}`]
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch admission details: ${response.statusText}`);
+    }
+
+    const data: ApiResponse<UniversityAdmissionDetail> = await response.json();
+
+    if (data.code !== 200) {
+      throw new Error(data.message || "Failed to fetch admission details");
+    }
+
+    return data.result;
+  } catch (error) {
+    console.error('Error fetching admission details:', error);
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "Failed to fetch university admission details"
+    );
   }
 }
 
 
 
-export async function getDetailUniversityAdmission(
+// ============================================
+// CLIENT-SIDE FUNCTIONS (for Client Components)
+// ============================================
+
+/**
+ * Fetch university admission details via Next.js API Route (CLIENT-SIDE)
+ * Used in Client Components for dynamic data loading
+ */
+export async function fetchAdmissionDetailsClient(
   code: string,
   year?: string,
   admissionMethod?: string
 ): Promise<UniversityAdmissionDetail> {
-  const isServer = typeof window === "undefined";
-
-  // isServer is checked to determine which API instance to use. If it's server-side, NEXT_API is used; client-side, SPRING_API is used.
-
-  console.log("isServer:", isServer);
-  console.log("Fetching admission details for:", { code, year, admissionMethod });
-
   try {
-    const queryParams = { code, year, admissionMethod };
-    const api = isServer ? NEXT_API : SPRING_API;
+    // Build query params
+    const params = new URLSearchParams();
+    if (year) params.append('year', year);
+    if (admissionMethod) params.append('admissionMethod', admissionMethod);
 
-    const res = await api.get<ApiResponse<UniversityAdmissionDetail>>(
-      isServer ? nextEndpoint.UNIVERSITY_BENCHMARKS : `${springEndpoint.UNIVERSITY_BENCHMARKS}${code}`,
-      { params: queryParams }
-    );
+    const queryString = params.toString();
+    const url = `/api/universities/${code}/admissions${queryString ? `?${queryString}` : ''}`;
 
-    if (res.data.code !== 200) {
-      throw new Error(res.data.message || "Unknown API error");
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to fetch admission details');
     }
 
+    const data: UniversityAdmissionDetail = await response.json();
+    return data;
 
-
-    return res.data.result;
   } catch (error) {
-    const err = error as AxiosError<{ message?: string }>;
-    const message =
-      err.response?.data?.message ||
-      err.message ||
-      "Failed to fetch university admission details";
-    throw new Error(message);
+    console.error('Error fetching admission details (client):', error);
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "Failed to fetch university admission details"
+    );
   }
 }

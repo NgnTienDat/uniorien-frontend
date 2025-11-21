@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Admission } from "@/services/universityServices";
-import { getDetailUniversityAdmission } from "@/services/universityServices";
+import { fetchAdmissionDetailsClient } from "@/services/universityServices";
 import AdmissionTable from "@/app/(user)/benchmarks/[code]/AdmissionTable";
 
 interface AdmissionListProps {
@@ -17,8 +17,6 @@ export default function AdmissionList({
     const [loadingStates, setLoadingStates] = useState<Record<number, boolean>>({});
     const [previousYearDataMap, setPreviousYearDataMap] = useState<Record<number, Admission[]>>({});
     const [noMoreDataFlags, setNoMoreDataFlags] = useState<Record<number, boolean>>({});
-    console.log("Admission Details:", admissionList);
-
 
     const handleViewPreviousYear = async (
         admissionMethod: string,
@@ -30,23 +28,25 @@ export default function AdmissionList({
         setLoadingStates(prev => ({ ...prev, [index]: true }));
 
         try {
-            const res = await getDetailUniversityAdmission(
+            // ✅ Use client-side fetch function
+            const res = await fetchAdmissionDetailsClient(
                 universityCode,
                 prevYear,
                 admissionMethod
             );
+
             if (res.admissionList && res.admissionList.length > 0) {
                 setPreviousYearDataMap(prev => ({
                     ...prev,
                     [index]: [...(prev[index] || []), res.admissionList[0]]
                 }));
             } else {
-                // No data available for this year, set flag to hide button
+                // No data available for this year
                 setNoMoreDataFlags(prev => ({ ...prev, [index]: true }));
             }
         } catch (err) {
-            console.error(err);
-            // On error, also set flag to prevent further attempts
+            console.error('Error loading previous year:', err);
+            // On error, set flag to prevent further attempts
             setNoMoreDataFlags(prev => ({ ...prev, [index]: true }));
         } finally {
             setLoadingStates(prev => ({ ...prev, [index]: false }));

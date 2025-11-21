@@ -1,4 +1,3 @@
-// types/university.ts (TypeScript types)
 export interface University {
     id: string;
     name: string;

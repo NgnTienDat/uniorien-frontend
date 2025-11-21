@@ -26,7 +26,7 @@ export const NEXT_API = axios.create({
 
 
 export const API_AUTH = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+    baseURL: process.env.BACKEND_URL,
 });
 
 
