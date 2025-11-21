@@ -1,6 +1,6 @@
 import AdmissionList from "@/app/(user)/benchmarks/[code]/AdmissionList";
 import Container from "@/components/ui/container";
-import { getDetailUniversityAdmission } from "@/services/universityServices";
+import { getUniversityAdmissionDetails } from "@/services/universityServices";
 import Link from "next/link";
 
 export default async function UniversityAdmission({
@@ -13,7 +13,11 @@ export default async function UniversityAdmission({
     const { code } = await params;
     const { year, admissionMethod } = await searchParams;
 
-    const admissionDetails = await getDetailUniversityAdmission(code, year, admissionMethod);
+    const admissionDetails = await getUniversityAdmissionDetails(
+        code,
+        year,
+        admissionMethod
+    );
 
 
 
