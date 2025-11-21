@@ -1,3 +1,4 @@
+import { springEndpoint } from '@/lib/helper';
 import { NextRequest, NextResponse } from 'next/server';
 
 interface ApiResponse<T> {
@@ -22,7 +23,7 @@ export async function GET(
         if (admissionMethod) queryParams.append('admissionMethod', admissionMethod);
 
         const queryString = queryParams.toString();
-        const url = `${process.env.BACKEND_URL}/api/v1/uni/benchmarks/${code}${queryString ? `?${queryString}` : ''}`;
+        const url = `${process.env.BACKEND_URL}${springEndpoint.UNIVERSITY_BENCHMARKS}${code}${queryString ? `?${queryString}` : ''}`;
 
         // Call Spring Boot
         const response = await fetch(url, {

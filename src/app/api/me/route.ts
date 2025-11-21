@@ -1,4 +1,4 @@
-// app/api/user/me/route.ts
+import { springEndpoint } from '@/lib/helper';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
@@ -13,7 +13,7 @@ export async function GET() {
     try {
         // Verify token with Spring Boot
         const response = await fetch(
-            `${process.env.BACKEND_URL}/api/v1/users/my-info`,
+            `${process.env.BACKEND_URL}${springEndpoint.MY_INFO}`,
             {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,

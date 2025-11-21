@@ -16,42 +16,47 @@ interface AdmissionTableProps {
 
 export default function AdmissionTable({ benchmarkList }: AdmissionTableProps) {
     return (
-        <div className="overflow-x-auto shadow-xl">
-            <table className="min-w-full border border-gray-300 bg-white rounded-lg text-sm md:text-base ">
-                <thead className="bg-blue-50">
-                    <tr>
-                        <th className="border border-gray-300 px-3 py-1 text-left w-16">STT</th>
-                        <th className="border border-gray-300 px-3 py-1 text-left w-32">Mã ngành</th>
-                        <th className="border border-gray-300 px-3 py-1 text-left">Tên ngành</th>
-                        <th className="border border-gray-300 px-3 py-1 text-left w-32">Tổ hợp môn</th>
-                        <th className="border border-gray-300 px-3 py-1 text-center w-28">Điểm chuẩn</th>
-                        <th className="border border-gray-300 px-3 py-1 text-left w-48">Ghi chú</th>
+        <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+                <thead>
+                    <tr className="bg-slate-50 text-slate-500 text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
+                        <th className="px-4 py-3 w-12 text-center">STT</th>
+                        <th className="px-4 py-3 w-32">Mã ngành</th>
+                        <th className="px-4 py-3 min-w-[200px]">Tên ngành</th>
+                        <th className="px-4 py-3 w-40">Tổ hợp</th>
+                        <th className="px-4 py-3 w-28 text-right">Điểm chuẩn</th>
+                        <th className="px-4 py-3 min-w-[150px]">Ghi chú</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
                     {benchmarkList.map((b, index) => (
-                        <tr
-                            key={index}
-                            className={`hover:bg-blue-100 transition-colors ${index % 2 === 0 ? "bg-white" : "bg-blue-50"
-                                }`}
+                        <tr 
+                            key={index} 
+                            className="hover:bg-blue-50/50 transition-colors duration-150"
                         >
-                            <td className="border border-gray-300 px-3 py-1 text-center">
+                            <td className="px-4 py-3 text-center text-slate-400">
                                 {index + 1}
                             </td>
-                            <td className="border border-gray-300 px-3 py-1 text-gray-700">
-                                {b.majorCode || "-"}
+                            <td className="px-4 py-3 font-mono text-slate-600 font-medium">
+                                {b.majorCode || <span className="text-slate-300">-</span>}
                             </td>
-                            <td className="border border-gray-300 px-3 py-1 text-gray-700 break-words">
+                            <td className="px-4 py-3 font-medium text-slate-800">
                                 {b.major}
                             </td>
-                            <td className="border border-gray-300 px-3 py-1 text-gray-600">
-                                {b.subjectCombinations || "-"}
+                            <td className="px-4 py-3 text-slate-600">
+                                {b.subjectCombinations ? (
+                                    <span className="inline-block bg-slate-100 px-2 py-0.5 rounded text-xs text-slate-600 font-medium border border-slate-200">
+                                        {b.subjectCombinations}
+                                    </span>
+                                ) : "-"}
                             </td>
-                            <td className="border border-gray-300 px-3 py-1 text-center font-semibold text-blue-700">
-                                {b.score}
+                            <td className="px-4 py-3 text-right">
+                                <span className="font-bold text-blue-600 text-base">
+                                    {b.score}
+                                </span>
                             </td>
-                            <td className="border border-gray-300 px-3 py-1 text-gray-600 italic">
-                                {b.note || "-"}
+                            <td className="px-4 py-3 text-slate-500 italic text-xs">
+                                {b.note || ""}
                             </td>
                         </tr>
                     ))}

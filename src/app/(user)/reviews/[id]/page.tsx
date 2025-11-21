@@ -31,23 +31,24 @@ async function getUniversityData(id: string) {
 
 
 
-export default async function UniversityPage({ 
-    params 
-}: { 
+export default async function UniversityPage({
+    params
+}: {
     params: Promise<{ id: string }>
-}){
-     const { id } = await params;
+}) {
+    const { id } = await params;
     const university = await getUniversityDetail(id);
     const initialReviews = await getUniversityComments(id);
+    console.log("initialReviews in UniversityPage:", initialReviews);
 
-    console.log("universityId in UniversityPage:", university);
+    // console.log("universityId in UniversityPage:", university);
 
 
     return (
         <Container>
             <div className="min-h-screen py-6">
                 <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex-col space-y-3">
-                    <UniversityHeader
+                    <UniversityHeader  // pass
                         university={university}
                         reviewCount={initialReviews.length}
                     />

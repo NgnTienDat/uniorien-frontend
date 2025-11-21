@@ -7,7 +7,7 @@ export const nextEndpoint = {
 
 export const springEndpoint = {
     // auth
-    TOKEN_OUTBOUND: "/auth/outbound/authentication",
+    AUTH_OAUTH_CALLBACK: "/auth/outbound/authentication",
     LOGOUT: "/auth/logout",
     INTROSPECT_TOKEN: '/auth/introspect',
     REFRESH_TOKEN: '/auth/refresh',

@@ -1,14 +1,13 @@
-// app/api/auth/oauth/callback/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
+import { springEndpoint } from '@/lib/helper';
 
 export async function POST(request: NextRequest) {
     try {
         const { code } = await request.json();
 
-        // Call Spring Boot backend
         const response = await fetch(
-            `${process.env.BACKEND_URL}/auth/outbound/authentication?code=${code}`,
+            `${process.env.BACKEND_URL}${springEndpoint.AUTH_OAUTH_CALLBACK}?code=${code}`,
             { method: 'POST' }
         );
 
@@ -22,10 +21,10 @@ export async function POST(request: NextRequest) {
         const data = await response.json();
         const { token, user } = data.result;
 
-        // ✅ Set HttpOnly cookies - SECURE!
+        // Set HttpOnly cookies - SECURE!
         // cookies().set('accessToken', token, {
         (await cookies()).set('accessToken', token, {
-            httpOnly: true, // ← CRITICAL: Cannot be accessed by JavaScript
+            httpOnly: true, // CRITICAL: Cannot be accessed by JavaScript
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
             maxAge: 60 * 60, // 1 hour

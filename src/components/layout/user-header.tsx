@@ -4,34 +4,82 @@ import { useState } from "react";
 import { UONavigationMenu } from "@/components/UONavigationMenu";
 import { UOMobileSidebar } from "@/components/UOMobileSidebar";
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { Bell, GraduationCap, Menu, User, LogOut, Loader2 } from "lucide-react";
 import { UOButton } from "@/components/UOButton";
 import { useUser } from "@/hooks/useUser";
 import useLogout from "@/hooks/useLogout";
 
+// Giả định component Avatar/Dropdown để hiển thị chi tiết người dùng
+// Nếu chưa có, bạn có thể thay thế bằng một nút bấm đơn giản hơn
+const UserAvatarDropdown = ({ user, logout, isLoggingOut }: { user: any, logout: () => void, isLoggingOut: boolean }) => (
+    <div className="relative group">
+        <button className="flex items-center gap-2 p-2 rounded-full hover:bg-slate-100 transition-colors border border-transparent group-hover:border-blue-200">
+            {/* Giả định Avatar */}
+            <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-semibold uppercase">
+                {user?.fullName ? user.fullName[0] : <User size={18} />}
+            </div>
+            {/* Tên người dùng (chỉ hiện trên MD trở lên) */}
+            <span className="hidden lg:inline text-slate-700 font-medium text-sm truncate max-w-[120px]">
+                {user?.displayName || "Tài khoản"}
+            </span>
+        </button>
+
+        {/* User Dropdown Menu */}
+        <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-100 rounded-lg shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 origin-top-right z-[100]">
+            <div className="px-4 py-2 text-sm text-slate-500 truncate border-b border-slate-100">
+                Chào mừng, <span className="font-semibold text-blue-600">{user?.fullName || "Bạn"}</span>
+            </div>
+            {/* Nút Đăng xuất trong Dropdown */}
+            <button
+                onClick={logout}
+                disabled={isLoggingOut}
+                className="w-full text-left flex items-center px-4 py-2 text-sm text-slate-700
+                 hover:bg-red-50 hover:text-red-600 transition-colors"
+            >
+                {isLoggingOut ? (
+                    <>
+                        <Loader2 size={16} className="mr-2 animate-spin" /> Đang đăng xuất...
+                    </>
+                ) : (
+                    <>
+                        <LogOut size={16} className="mr-2" /> Đăng xuất
+                    </>
+                )}
+            </button>
+        </div>
+    </div>
+);
+
+
 export default function UserHeader() {
-    const { user, isAuthenticated, isLoading } = useUser(); // ✅ Add isLoading
+    const { user, isAuthenticated, isLoading } = useUser();
     const [menuOpen, setMenuOpen] = useState(false);
     const { logout, isPending: isLoggingOut } = useLogout();
 
     return (
-        <header className="bg-white border-b border-gray-200 px-4 md:px-10 py-3 flex items-center shadow-lg justify-between relative z-50">
-            {/* Left section: Hamburger + Logo */}
+        <header className="bg-white border-b border-gray-100 px-4 md:px-8 py-3 flex items-center shadow-md justify-between relative z-50">
+            {/* --- LEFT SECTION: Hamburger + Logo + Navigation --- */}
             <div className="flex items-center gap-6">
-                <div className="flex items-center gap-3 mr-4">
-                    <button
-                        className="md:hidden p-2 text-gray-600 hover:text-blue-600 cursor-pointer"
-                        onClick={() => setMenuOpen(true)}
-                    >
-                        <Menu size={22} />
-                    </button>
 
-                    <Link href="/" className="text-2xl font-semibold text-blue-600">
-                        UniOrien
-                    </Link>
-                </div>
+                {/* Hamburger (Mobile) */}
+                <button
+                    className="md:hidden p-2 text-gray-600 hover:text-blue-600 cursor-pointer"
+                    onClick={() => setMenuOpen(true)}
+                    aria-label="Open menu"
+                >
+                    <Menu size={22} />
+                </button>
 
-                <div className="hidden md:flex items-center gap-4">
+                {/* Logo */}
+                <Link href="/" className="flex items-center gap-2">
+                    <div className="bg-blue-600 p-2 rounded-lg shadow-md">
+                        <GraduationCap className="text-white" size={20} />
+                    </div>
+                    <span className="text-xl md:text-2xl font-bold text-blue-900 tracking-tight hidden sm:block">UniOrien</span>
+                </Link>
+
+                {/* Navigation Menu (Desktop) */}
+                <div className="hidden md:flex items-center gap-2">
                     <UONavigationMenu
                         title="Tra cứu"
                         items={[
@@ -39,31 +87,56 @@ export default function UserHeader() {
                             { label: "Ngành đào tạo", href: "/majors" },
                         ]}
                     />
-
                     <Link
                         href="/reviews"
-                        className="text-gray-600 hover:text-blue-600 hover:bg-gray-100 font-medium px-4 py-2 rounded-md transition-colors"
+                        className="text-slate-600 hover:text-blue-600
+                        hover:bg-slate-50 font-medium px-4 py-2 rounded-lg transition-colors text-md"
                     >
-                        Xem đánh giá về trường đại học
+                        Review các trường đại học
                     </Link>
                 </div>
             </div>
-            
-            <div className="flex space-x-1">
-                {/* ✅ Show loading state */}
+
+            {/* --- RIGHT SECTION: Auth Status & Actions --- */}
+            <div className="flex items-center gap-3">
+
+                {/* Notification Button (Luôn hiển thị) */}
+                <button
+                    className="p-2 hover:bg-slate-100 rounded-full transition-colors relative"
+                    aria-label="Notifications"
+                >
+                    <Bell size={20} className="text-slate-500" />
+                    <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+                </button>
+
+                {/* Auth/Loading Logic */}
                 {isLoading ? (
-                    <div className="px-4 py-2 text-gray-500">Loading...</div>
+                    // Loading State
+                    <div className="flex items-center gap-2 px-4 py-2 bg-slate-100 rounded-full text-sm text-slate-500">
+                        <Loader2 size={16} className="animate-spin" /> Tải...
+                    </div>
                 ) : isAuthenticated ? (
-                    <UOButton 
-                        name={isLoggingOut ? "Đang đăng xuất..." : "Đăng xuất"} 
-                        onClick={() => logout()}
+                    // Authenticated State (Show User Dropdown)
+                    <UserAvatarDropdown
+                        user={user}
+                        logout={logout}
+                        isLoggingOut={isLoggingOut}
                     />
                 ) : (
-                    <UOButton name="Đăng nhập" href="/login" />
+                    // Guest State (Show Login Button)
+                    <UOButton
+                        name="Đăng nhập"
+                        href="/login"
+                    />
                 )}
             </div>
 
-            <UOMobileSidebar isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+            {/* Mobile Sidebar */}
+            <UOMobileSidebar
+                isOpen={menuOpen}
+                onClose={() => setMenuOpen(false)}
+
+            />
         </header>
     );
 }

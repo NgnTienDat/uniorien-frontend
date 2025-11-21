@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
+import { springEndpoint } from '@/lib/helper';
 
 export async function POST() {
     const accessToken = (await cookies()).get('accessToken')?.value;
@@ -8,7 +9,7 @@ export async function POST() {
     if (accessToken) {
         try {
             await fetch(
-                `${process.env.BACKEND_URL}/auth/logout`,
+                `${process.env.BACKEND_URL}${springEndpoint.LOGOUT}`,
                 {
                     method: 'POST',
                     headers: {

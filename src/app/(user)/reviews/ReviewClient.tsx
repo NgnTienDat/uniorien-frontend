@@ -19,8 +19,8 @@ type University = {
 const ITEMS_PER_PAGE = 9;
 
 export default function ReviewClient({ universities }: { universities: University[] }) {
-  const { universities: cachedUniversities, allUniversities } = useUniversityReviews(universities);
-  const { searchTerm, setSearchTerm, filteredUniversities } = useUniversityFilter(allUniversities);
+  const { universities: cachedUniversities, allUniversities } = useUniversityReviews(universities); // pass
+  const { searchTerm, setSearchTerm, filteredUniversities } = useUniversityFilter(allUniversities); // pass
   const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE);
 
   // Use filtered results for display
