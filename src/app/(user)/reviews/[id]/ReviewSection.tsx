@@ -24,13 +24,12 @@ function renderStars(rating: number, size = 'w-5 h-5') {
 
 export function ReviewSection({ universityCode, universityId, initialReviews }: ReviewSectionProps) {
     const [reviews, setReviews] = useState<CommentResponse[]>(initialReviews);
-    const { comments, addComment, isAdding } = useComment(universityCode, universityId);
+    // const { comments, addComment, isAdding } = useComment(universityCode, universityId);
+    const { addComment } = useComment(universityCode, universityId);
     const [formData, setFormData] = useState({
         universityId: universityId,
         content: ''
     });
-
-    console.log("universityId in ReviewSection:", universityId);
 
 
     const handleSubmit = async () => {
@@ -40,8 +39,8 @@ export function ReviewSection({ universityCode, universityId, initialReviews }: 
             await addComment(formData.content);
             setFormData({ ...formData, content: '' });
             // Refresh reviews after adding a new comment
-            const updatedComments = comments;
-            setReviews(updatedComments || []);
+            // const updatedComments = comments;
+            // setReviews(updatedComments || []);
         } catch (err) {
             console.error(err);
         }

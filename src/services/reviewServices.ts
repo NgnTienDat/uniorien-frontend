@@ -3,99 +3,153 @@ import { nextEndpoint, springEndpoint } from "@/lib/helper";
 import { ApiResponse } from "@/types/response";
 import { CommentResponse, University, UniversityDetail } from "@/types/review";
 import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 
 
+// ============================================
+// SERVER-SIDE FUNCTIONS (for Server Components)
+// ============================================
 
+/**
+ * Fetch major groups directly from Spring Boot
+ * Used in Server Component: /majors/page.tsx
+ */
 
 
 export async function getUniversityReviews(): Promise<University[]> {
   try {
-    const res = await NEXT_API.get<ApiResponse<University[]>>(nextEndpoint.ALL_UNI_REVIEW_LIST);
-
-    if (res.data.code !== 200) {
-      throw new Error(res.data.message || "API returned unsuccessful response");
+    const response = await fetch(
+      `${process.env.BACKEND_URL}${springEndpoint.ALL_UNI_REVIEW_LIST}`,
+      {
+        next: {
+          revalidate: 3600, // Cache for 1 hour
+          tags: ['university-reviews']
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to fetch university reviews: ${response.statusText}`);
     }
-
-
-    return res.data.result;
+    const data: ApiResponse<University[]> = await response.json();
+    if (data.code !== 200) {
+      throw new Error(data.message || "Failed to fetch university reviews");
+    }
+    return data.result;
   } catch (error) {
-    const err = error as AxiosError<{ message?: string }>;
-    const message =
-      err.response?.data?.message ||
-      err.message ||
-      "Failed to fetch universities";
-    throw new Error(message);
+    console.error('Error fetching university reviews:', error);
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "Failed to fetch university reviews"
+    );
   }
 }
 
-
+/**
+ * Fetch major groups directly from Spring Boot
+ * Used in Server Component: /majors/page.tsx
+ */
 
 export async function getUniversityComments(
   universityCode: string
 ): Promise<CommentResponse[]> {
   try {
-    const res = await SPRING_API.get<ApiResponse<CommentResponse[]>>(
-      springEndpoint.ALL_COMMENT(universityCode)
+    const response = await fetch(
+      `${process.env.BACKEND_URL}${springEndpoint.ALL_COMMENT(universityCode)}`,
+      {
+        next: {
+          revalidate: 300, // Cache for 5 minutes
+          tags: ['university-comments', `comments-${universityCode}`]
+        },
+      }
     );
-
-    if (res.data.code !== 200) {
-      throw new Error(res.data.message || "API returned unsuccessful response");
+    if (!response.ok) {
+      throw new Error(`Failed to fetch university comments: ${response.statusText}`);
     }
-
-    return res.data.result;
+    const data: ApiResponse<CommentResponse[]> = await response.json();
+    if (data.code !== 200) {
+      throw new Error(data.message || "Failed to fetch university comments");
+    }
+    return data.result;
   } catch (error) {
-    const err = error as AxiosError<{ message?: string }>;
-    const message =
-      err.response?.data?.message ||
-      err.message ||
-      "Failed to fetch university reviews";
-    throw new Error(message);
+    console.error('Error fetching university comments:', error);
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "Failed to fetch university comments"
+    );
   }
+
 }
+
+
+/**
+ * Fetch major groups directly from Spring Boot
+ * Used in Server Component: /majors/page.tsx
+ */
+
 
 export async function addUniversityComment(
   universityId: string,
   content: string
 ): Promise<void> {
   try {
-    const res = await API_AUTH.post<ApiResponse<null>>(
-      springEndpoint.ADD_COMMENT,
-      { universityId, content }
-    );
+    const response = await fetch('/api/reviews', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ universityId, content }),
+    });
 
-    if (res.data.code !== 201) {
-      throw new Error(res.data.message || "API returned unsuccessful response");
+    if (!response.ok) {
+      const error = new Error(response.statusText) as any;
+      error.status = response.status;
+      throw error;
     }
   } catch (error) {
-    const err = error as AxiosError<{ message?: string }>;
-    const message =
-      err.response?.data?.message ||
-      err.message ||
-      "Failed to add comment";
-
-    throw new Error(message);
+    console.error('Error adding university comment:', error);
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "Failed to add comment"
+    );
   }
 }
 
+
+/**
+ * Fetch major groups directly from Spring Boot
+ * Used in Server Component: /majors/page.tsx
+ */
 
 export async function getUniversityDetail(
   universityCode: string
 ): Promise<UniversityDetail> {
   try {
-    const res = await SPRING_API.get<ApiResponse<UniversityDetail>>(
-      springEndpoint.UNIVERSITY_DETAIL(universityCode)
+    const response = await fetch(
+      `${process.env.BACKEND_URL}${springEndpoint.UNIVERSITY_DETAIL(universityCode)}`,
+      {
+        next: {
+          revalidate: 3600, // Cache for 1 hour
+          tags: ['university-detail', `university-${universityCode}`]
+        },
+      }
     );
-    if (res.data.code !== 200) {
-      throw new Error(res.data.message || "API returned unsuccessful response");
+    if (!response.ok) {
+      throw new Error(`Failed to fetch university detail: ${response.statusText}`);
     }
-    return res.data.result;
+    const data: ApiResponse<UniversityDetail> = await response.json();
+    if (data.code !== 200) {
+      throw new Error(data.message || "Failed to fetch university detail");
+    }
+    return data.result;
   } catch (error) {
-    const err = error as AxiosError<{ message?: string }>;
-    const message =
-      err.response?.data?.message ||
-      err.message ||
-      "Failed to fetch university detail";
-    throw new Error(message);
+    console.error('Error fetching university detail:', error);
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "Failed to fetch university detail"
+    );
   }
+
 }

@@ -1,5 +1,6 @@
 // COMPLETED REFACTORING WITH NEXT.JS BEST PRACTICES 
 // NGUYEN TIEN DAT 21-11-2025
+import { springEndpoint } from "@/lib/helper";
 import { ApiResponse } from "@/types/response";
 
 export interface University {
@@ -43,9 +44,7 @@ export interface UniversityAdmissionDetail {
 
 export async function getUniversities(): Promise<University[]> {
   try {
-    console.log("process.env.BACKEND_URL:", process.env.BACKEND_URL);
-
-    const response = await fetch(`${process.env.BACKEND_URL}/api/v1/uni/`,
+    const response = await fetch(`${process.env.BACKEND_URL}${springEndpoint.UNIVERSITY_LIST}`,
       {
         // Next.js caching options
         next: {
@@ -96,7 +95,7 @@ export async function getUniversityAdmissionDetails(
     if (admissionMethod) params.append('admissionMethod', admissionMethod);
 
     const queryString = params.toString();
-    const url = `${process.env.BACKEND_URL}/api/v1/uni/benchmarks/${code}${queryString ? `?${queryString}` : ''}`;
+    const url = `${process.env.BACKEND_URL}${springEndpoint.UNIVERSITY_BENCHMARKS}${code}${queryString ? `?${queryString}` : ''}`;
 
     const response = await fetch(url, {
       next: {

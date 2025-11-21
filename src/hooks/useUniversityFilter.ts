@@ -2,11 +2,11 @@
 
 import { useMemo, useState } from "react";
 
-type University = {
+interface University {
     id: string;
     universityCode: string;
     universityName: string;
-};
+}
 
 export function useUniversityFilter(universities: University[]) {
     const [searchTerm, setSearchTerm] = useState("");

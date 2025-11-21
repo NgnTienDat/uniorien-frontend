@@ -1,75 +1,92 @@
-import { NEXT_API, SPRING_API } from "@/lib/axiosConfig";
-import { nextEndpoint, springEndpoint } from "@/lib/helper";
-import { AxiosError } from "axios";
-import next from "next";
+// COMPLETED REFACTORING WITH NEXT.JS BEST PRACTICES 
+// NGUYEN TIEN DAT 21-11-2025
 
-export interface Score {
-  year: number;
-  score: number;
-  subjectCombinations: string;
-}
-
-export interface MajorDetail {
-  majorName: string;
-  subjectCombinations: string;
-  scores: Score[];
-}
-
-export interface MajorSearchItem {
-  universityName: string;
-  majorDetails: MajorDetail[];
-}
+import { MajorGroup, MajorSearchItem } from "@/types/major";
+import { ApiResponse } from "@/types/response";
 
 
+// ============================================
+// SERVER-SIDE FUNCTIONS (for Server Components)
+// ============================================
 
-
-interface ApiResponse<T> {
-    code: number;
-    message: string;
-    result: T;
-}
-
-export async function getMajorGroups() {
-    const res = await NEXT_API.get(nextEndpoint.MAJOR_LIST);
-
-    if (res.status !== 200) {
-        throw new Error(`Failed to fetch major groups: ${res.status}`);
-    }
-
-    return res.data.result;
-}
-
-
-
-export async function getMajorRelatedMajorSearching(
-    majorName: string,
-    admissionMethod?: string,
-    location?: string,
-): Promise<MajorSearchItem[]> {
-    const isServer = typeof window === "undefined";
-
-
+/**
+ * Fetch major groups directly from Spring Boot
+ * Used in Server Component: /majors/page.tsx
+ */
+export async function getMajorGroups(): Promise<MajorGroup[]> {
     try {
-        const queryParams = { majorName, admissionMethod, location };
-
-        const res = await SPRING_API.get<ApiResponse<MajorSearchItem[]>>(
-            springEndpoint.MAJORS_SEARCH,
-            { params: queryParams }
+        const response = await fetch(
+            `${process.env.BACKEND_URL}/api/v1/majors/major-groups`,
+            {
+                next: {
+                    revalidate: 3600, // Cache for 1 hour
+                    tags: ['major-groups']
+                },
+            }
         );
 
-        if (res.data.code !== 200) {
-            throw new Error(res.data.message || "Unknown API error");
+        if (!response.ok) {
+            throw new Error(`Failed to fetch major groups: ${response.statusText}`);
         }
 
+        const data: ApiResponse<MajorGroup[]> = await response.json();
 
+        if (data.code !== 200) {
+            throw new Error(data.message || "Failed to fetch major groups");
+        }
 
-        return res.data.result;
+        return data.result;
+
     } catch (error) {
-        const err = error as AxiosError<{ message?: string }>;
-        const message =
-            err.response?.data?.message ||
-            err.message ||
-            "Failed to fetch university admission details";
-        throw new Error(message);
+        console.error('Error fetching major groups:', error);
+        throw new Error(
+            error instanceof Error
+                ? error.message
+                : "Failed to fetch major groups"
+        );
+    }
+}
+
+
+export async function searchMajorsByName(
+    majorName: string,
+    admissionMethod?: string,
+    location?: string
+): Promise<MajorSearchItem[]> {
+    try {
+        const params = new URLSearchParams();
+        params.append('majorName', majorName);
+        if (admissionMethod) params.append('admissionMethod', admissionMethod);
+        if (location) params.append('location', location);
+
+        const queryString = params.toString();
+        const url = `${process.env.BACKEND_URL}/api/v1/majors/filter?${queryString}`;
+
+        const response = await fetch(url, {
+            next: {
+                revalidate: 1800, // Cache for 30 minutes (majors change less frequently)
+                tags: ['majors', `major-${majorName}`]
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to search majors: ${response.statusText}`);
+        }
+
+        const data: ApiResponse<MajorSearchItem[]> = await response.json();
+
+        if (data.code !== 200) {
+            throw new Error(data.message || "Failed to search majors");
+        }
+
+        return data.result;
+
+    } catch (error) {
+        console.error('Error searching majors:', error);
+        throw new Error(
+            error instanceof Error
+                ? error.message
+                : "Failed to search majors"
+        );
     }
 }

@@ -1,62 +1,110 @@
 import Link from 'next/link';
 import React from 'react';
 import { FaLinkedin, FaGithub, FaFacebook } from 'react-icons/fa';
+import { Mail, Briefcase, GraduationCap } from 'lucide-react'; // Sử dụng thêm Lucide Icons
 
 const Footer: React.FC = () => {
     return (
-        <footer className="bg-sky-100 text-slate-800 p-5">
-            <div className="container mx-auto">
-                {/* Main content grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
+        <footer className="bg-blue-50 text-slate-700 py-10 border-t border-blue-100">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                
+                {/* --- Main Content Grid --- */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm md:divide-x md:divide-slate-200">
 
-                    <div className="space-y-4 p-5 border-slate-300">
-                        <h2 className="text-2xl font-bold text-blue-700">UniOrien</h2>
-                        <p>
-                            Nền tảng tư vấn chọn trường đại học tích hợp AI ChatBot. <br />
-                            Nhằm hỗ trợ thí sinh cũng như phụ huynh tìm được trường và ngành học phù hợp.
+                    {/* --- 1. Thương hiệu & Mô tả --- */}
+                    <div className="space-y-4 pr-6">
+                        <h2 className="text-3xl font-extrabold text-blue-700 flex items-center gap-2">
+                            <GraduationCap size={32} className="text-blue-500" />
+                            UniOrien
+                        </h2>
+                        
+                        <p className="text-slate-600 leading-relaxed">
+                            Nền tảng tư vấn chọn trường đại học tích hợp AI ChatBot. 
+                            Chúng tôi hỗ trợ thí sinh và phụ huynh tìm được trường, ngành học phù hợp dựa trên dữ liệu chuẩn xác.
                         </p>
-                        <p>
-                            Trang web được thiết kế và xây dựng bởi Nguyễn Tiến Đạt - Sinh viên năm 4 ngành Khoa học máy tính
-                        </p>
+                        
+                        <div className="pt-2 text-xs text-slate-500 italic border-t border-slate-100">
+                            <Briefcase size={16} className="inline mr-1 -mt-0.5 text-slate-400" /> 
+                            Thiết kế &amp; Xây dựng bởi Nguyễn Tiến Đạt - Sinh viên năm 4 ngành Khoa học máy tính.
+                        </div>
                     </div>
 
-                    <div className='p-5 border-slate-300'>
-                        <h3 className="text-lg font-semibold mb-4">Các Liên Kết</h3>
-                        <ul className="space-y-2 text-blue-600">
+                    {/* --- 2. Liên kết điều hướng --- */}
+                    <div className='px-6 md:pl-8'>
+                        <h3 className="text-lg font-semibold mb-5 text-slate-800 border-b border-blue-500 pb-1 inline-block">
+                            Liên Kết Nhanh
+                        </h3>
+                        <ul className="space-y-3">
                             <li>
-                                <Link href="/benchmarks" className="hover:underline">Tra cứu trường đại học</Link>
+                                <Link 
+                                    href="/benchmarks" 
+                                    className="text-blue-600 hover:text-blue-800 transition-colors font-medium flex items-center gap-2"
+                                >
+                                    <span className="text-xs">•</span> Tra cứu Điểm chuẩn
+                                </Link>
                             </li>
                             <li>
-                                <Link href="/majors" className="hover:underline">Tra cứu ngành đào tạo</Link>
+                                <Link 
+                                    href="/majors" 
+                                    className="text-blue-600 hover:text-blue-800 transition-colors font-medium flex items-center gap-2"
+                                >
+                                    <span className="text-xs">•</span> Tra cứu Ngành học
+                                </Link>
+                            </li>
+                            <li>
+                                <Link 
+                                    href="/about" 
+                                    className="text-blue-600 hover:text-blue-800 transition-colors font-medium flex items-center gap-2"
+                                >
+                                    <span className="text-xs">•</span> Về chúng tôi
+                                </Link>
                             </li>
                         </ul>
                     </div>
 
-                    <div className='p-5'>
-                        <h3 className="text-lg font-semibold mb-4">Thông tin liên hệ</h3>
-                        <div className="flex items-center space-x-6">
-                            <a href="https://www.linkedin.com/in/dat-nguyen-7b3411297/" aria-label="LinkedIn Profile" className="text-2xl text-gray-700
-                             hover:text-blue-600 transition-colors">
+                    {/* --- 3. Thông tin liên hệ & Mạng xã hội --- */}
+                    <div className='px-6 md:pl-8'>
+                        <h3 className="text-lg font-semibold mb-5 text-slate-800 border-b border-blue-500 pb-1 inline-block">
+                            Kết nối với Dat
+                        </h3>
+                        
+                        {/* Social Icons */}
+                        <div className="flex items-center space-x-5 mb-5">
+                            <a 
+                                href="https://www.linkedin.com/in/dat-nguyen-7b3411297/" 
+                                aria-label="LinkedIn Profile" 
+                                className="text-2xl text-slate-500 hover:text-[#0A66C2] transition-colors" // Màu LinkedIn chính thức
+                            >
                                 <FaLinkedin />
                             </a>
-                            <a href="https://github.com/NgnTienDat" aria-label="GitHub Profile" className="text-2xl text-gray-700
-                             hover:text-blue-800 transition-colors">
+                            <a 
+                                href="https://github.com/NgnTienDat" 
+                                aria-label="GitHub Profile" 
+                                className="text-2xl text-slate-500 hover:text-[#171515] transition-colors" // Màu GitHub chính thức
+                            >
                                 <FaGithub />
                             </a>
-                            <a href="https://www.facebook.com/gosoi.964" aria-label="Facebook Profile" className="text-2xl text-gray-700
-                             hover:text-blue-800 transition-colors">
+                            <a 
+                                href="https://www.facebook.com/gosoi.964" 
+                                aria-label="Facebook Profile" 
+                                className="text-2xl text-slate-500 hover:text-[#1877F2] transition-colors" // Màu Facebook chính thức
+                            >
                                 <FaFacebook />
                             </a>
                         </div>
-                        <p className="mt-4">
+                        
+                        {/* Email */}
+                        <p className="mt-4 flex items-center text-slate-600">
+                            <Mail size={16} className="text-blue-500 mr-2" />
                             Email: 
-                            <span className="text-blue-600">{" "}tie.dat2004@gmail.com</span>
+                            <span className="text-blue-600 ml-1 hover:underline">{" "}tie.dat2004@gmail.com</span>
                         </p>
                     </div>
 
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-slate-300 text-center text-sm text-slate-500">
+                {/* --- Copyright --- */}
+                <div className="mt-10 pt-6 border-t border-slate-200 text-center text-xs text-slate-500">
                     <p>Copyright © 2025 - Nguyen Tien Dat. All Rights Reserved.</p>
                 </div>
             </div>

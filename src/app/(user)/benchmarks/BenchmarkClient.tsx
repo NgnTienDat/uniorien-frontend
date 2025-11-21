@@ -4,12 +4,12 @@ import UniversityList from "@/app/(user)/benchmarks/UniversityList";
 import SearchInput from "@/components/SearchInput";
 import { UOSelectBox } from "@/components/UOSelectBox";
 import { useUniversityFilter } from "@/hooks/useUniversityFilter";
-
-type University = {
+interface University {
     id: string;
     universityCode: string;
     universityName: string;
-};
+}
+
 
 export default function BenchmarkClient({ universities }: { universities: University[] }) {
     const { searchTerm, setSearchTerm, filteredUniversities } = useUniversityFilter(universities);
