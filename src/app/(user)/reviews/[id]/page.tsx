@@ -23,6 +23,7 @@ export default async function UniversityPage({ params }: { params: Promise<{ id:
         getUniversityComments(id),
     ]);
 
+    console.log('University Data:', university);
     return (
         <Container>
             <div className="min-h-screen py-6">
@@ -44,7 +45,7 @@ export default async function UniversityPage({ params }: { params: Promise<{ id:
                         {/* Left Column: Main Info */}
                         <div className="lg:col-span-2 space-y-6">
                             <UniversityAbout about={university?.about} />
-                            <UniversityCampus images={university?.campusImages} />
+                            {/* <UniversityCampus images={university?.campusImages} /> */}
                             <ReviewSection
                                 universityCode={id}
                                 universityId={university.universityId}
@@ -63,11 +64,13 @@ export default async function UniversityPage({ params }: { params: Promise<{ id:
                                     </li>
                                     <li className="flex justify-between border-b border-slate-100 pb-2">
                                         <span>Loại hình:</span>
-                                        <span className="font-medium">Công lập</span>
+                                        <span className="font-medium">{university.institutionType || "---"}</span>
                                     </li>
                                     <li className="flex justify-between pt-1">
                                         <span>Website:</span>
-                                        <a href="#" className="text-blue-500 hover:underline">Truy cập</a>
+                                        <a href={university.websiteAddress} className="text-blue-500 hover:underline">
+                                            {university.websiteAddress || "---"}
+                                        </a>
                                     </li>
                                 </ul>
                             </div>

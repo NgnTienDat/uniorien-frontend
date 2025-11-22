@@ -1,3 +1,5 @@
+import { PageResponse } from "@/types/response";
+
 export interface CommentResponse {
   id: string;
   content: string;
@@ -6,6 +8,8 @@ export interface CommentResponse {
   createdAt: string;
 }
 
+export type CommentsPageResponse = PageResponse<CommentResponse>;
+
 export interface University {
   id: string;
   universityCode: string;
@@ -13,6 +17,8 @@ export interface University {
   logo: string;
   description: string;
   location: string;
+  rating?: number;
+  reviewCount?: number;
 }
 
 export interface Review {
@@ -24,7 +30,10 @@ export interface Review {
   avatar: string;
 }
 
-
+export interface CampusImage {
+  id: number;
+  url: string;
+}
 export interface UniversityDetail {
   id: string;
   universityName: string;
@@ -38,5 +47,10 @@ export interface UniversityDetail {
   students?: number;
   founded?: number;
   acceptance?: string;
-  campusImages: { id: number; url: string }[];
+  campusImages?: CampusImage[];
+  institutionType?: string;     // Công lập / Tư thục / Quốc tế...
+  programsOffered?: string;     // Đa ngành / Kỹ thuật / Kinh tế...
 }
+
+
+

@@ -4,7 +4,7 @@
 
 import { springEndpoint } from "@/lib/helper";
 import { ApiResponse } from "@/types/response";
-import { CommentResponse, University, UniversityDetail } from "@/types/review";
+import { CommentResponse, CommentsPageResponse, University, UniversityDetail } from "@/types/review";
 
 // ============================================
 // SERVER-SIDE FUNCTIONS (for Server Components)
@@ -136,11 +136,13 @@ export async function getUniversityDetail(
  * Used in Client Components for refreshing comments
  */
 export async function fetchUniversityCommentsClient(
-  universityCode: string
-): Promise<CommentResponse[]> {
+  universityCode: string,
+  page: number = 0,
+  size: number = 10
+): Promise<CommentsPageResponse> {
   try {
     const response = await fetch(
-      `/api/reviews/${universityCode}/comments`,
+      `/api/reviews/${universityCode}/comments?page=${page}&size=${size}&sort=createdAt,desc`,
       {
         method: 'GET',
         headers: {
@@ -154,7 +156,7 @@ export async function fetchUniversityCommentsClient(
       throw new Error(error.message || 'Failed to fetch comments');
     }
 
-    const data = await response.json();
+    const data: CommentsPageResponse = await response.json();
     return data;
 
   } catch (error) {

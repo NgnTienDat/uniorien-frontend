@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { springEndpoint } from '@/lib/helper';
+import { CommentsPageResponse } from '@/types/review';
 
 interface ApiResponse<T> {
   code: number;
@@ -13,13 +14,18 @@ export async function GET(
 ) {
   try {
     const { universityCode } = await params;
+    const searchParams = request.nextUrl.searchParams;
 
-    const response = await fetch(
-      `${process.env.BACKEND_URL}${springEndpoint.ALL_COMMENT(universityCode)}`,
-      {
-        cache: 'no-store', // Don't cache for client requests
-      }
-    );
+    // Get pagination params from query string
+    const page = searchParams.get('page') || '0';
+    const size = searchParams.get('size') || '10';
+    const sort = searchParams.get('sort') || 'createdAt,desc';
+
+    const url = `${process.env.BACKEND_URL}${springEndpoint.ALL_COMMENT(universityCode)}?page=${page}&size=${size}&sort=${sort}`;
+
+    const response = await fetch(url, {
+      cache: 'no-store',
+    });
 
     if (!response.ok) {
       return NextResponse.json(
@@ -28,7 +34,7 @@ export async function GET(
       );
     }
 
-    const data: ApiResponse<any[]> = await response.json();
+    const data: ApiResponse<CommentsPageResponse> = await response.json();
 
     if (data.code !== 200) {
       return NextResponse.json(
