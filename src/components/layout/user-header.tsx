@@ -9,18 +9,29 @@ import { UOButton } from "@/components/UOButton";
 import { useUser } from "@/hooks/useUser";
 import useLogout from "@/hooks/useLogout";
 
-// Giả định component Avatar/Dropdown để hiển thị chi tiết người dùng
-// Nếu chưa có, bạn có thể thay thế bằng một nút bấm đơn giản hơn
+
 const UserAvatarDropdown = ({ user, logout, isLoggingOut }: { user: any, logout: () => void, isLoggingOut: boolean }) => (
     <div className="relative group">
         <button className="flex items-center gap-2 p-2 rounded-full hover:bg-slate-100 transition-colors border border-transparent group-hover:border-blue-200">
             {/* Giả định Avatar */}
             <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-semibold uppercase">
-                {user?.fullName ? user.fullName[0] : <User size={18} />}
+                {/* {user?.fullName ? user.fullName[0] : <User size={18} />} */}
+
+
+                {user?.avatar ? (
+                    <img
+                        src={user.avatar}
+                        alt={user.fullName}
+                        className="w-full h-full object-cover rounded-full"
+                        referrerPolicy="no-referrer"
+                    />
+                ) : (
+                    <User size={18} />
+                )}
             </div>
             {/* Tên người dùng (chỉ hiện trên MD trở lên) */}
             <span className="hidden lg:inline text-slate-700 font-medium text-sm truncate max-w-[120px]">
-                {user?.displayName || "Tài khoản"}
+                {user?.fullName || "Tài khoản"}
             </span>
         </button>
 
@@ -55,7 +66,6 @@ export default function UserHeader() {
     const { user, isAuthenticated, isLoading } = useUser();
     const [menuOpen, setMenuOpen] = useState(false);
     const { logout, isPending: isLoggingOut } = useLogout();
-
     return (
         <header className="bg-white border-b border-gray-100 px-4 md:px-8 py-3 flex items-center shadow-md justify-between relative z-50">
             {/* --- LEFT SECTION: Hamburger + Logo + Navigation --- */}
