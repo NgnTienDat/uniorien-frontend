@@ -167,7 +167,7 @@ function UserPage() {
                         </div>
 
                         {/* Newsletter Widget */}
-                        <div className="bg-white border border-slate-200 p-6 rounded-2xl">
+                        {/* <div className="bg-white border border-slate-200 p-6 rounded-2xl">
                             <h3 className="font-bold text-slate-800 mb-2">Nhận tin tức UniOrien</h3>
                             <p className="text-sm text-slate-500 mb-4">Cập nhật thông tin tuyển sinh mới nhất qua email.</p>
                             <div className="space-y-2">
@@ -176,7 +176,7 @@ function UserPage() {
                                     Đăng ký
                                 </button>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 

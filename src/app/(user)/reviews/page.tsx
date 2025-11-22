@@ -30,7 +30,7 @@ export default async function ReviewPage() {
                             <span className="text-blue-300">Cộng đồng sinh viên</span>
                         </h1>
                         <p className="text-blue-100 text-lg md:text-xl font-light max-w-2xl mx-auto">
-                            Khám phá hàng ngàn đánh giá về cơ sở vật chất, giảng viên và môi trường học tập để đưa ra lựa chọn đúng đắn nhất.
+                            Khám phá hàng trăm đánh giá về cơ sở vật chất, giảng viên và môi trường học tập để đưa ra lựa chọn đúng đắn nhất.
                         </p>
                         
                         <div className="flex justify-center gap-6 pt-4 text-sm font-medium text-blue-200">

@@ -3,25 +3,26 @@ import {
     addUniversityCommentClient,
     fetchUniversityCommentsClient
 } from "@/services/reviewServices";
-import { CommentResponse } from "@/types/review";
+import { CommentsPageResponse } from "@/types/review";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "react-toastify";
 
 export function useComment(universityCode: string, universityId: string) {
-    const router = useRouter();
     const queryClient = useQueryClient();
     const { showLoginRequired } = useLoginSonner();
+    const [currentPage, setCurrentPage] = useState(0);
+    const [pageSize] = useState(10);
 
-    // Fetch comments from client-side API route
+    // Fetch comments with pagination
     const {
-        data: comments,
+        data: pageData,
         isLoading,
         isError,
         refetch,
-    } = useQuery<CommentResponse[], Error>({
-        queryKey: ["comments", universityCode],
-        queryFn: () => fetchUniversityCommentsClient(universityCode),
+    } = useQuery<CommentsPageResponse, Error>({
+        queryKey: ["comments", universityCode, currentPage, pageSize],
+        queryFn: () => fetchUniversityCommentsClient(universityCode, currentPage, pageSize),
         enabled: !!universityCode,
     });
 
@@ -44,6 +45,8 @@ export function useComment(universityCode: string, universityId: string) {
         },
 
         onSuccess: () => {
+            // Reset to first page after adding comment
+            setCurrentPage(0);
             queryClient.invalidateQueries({
                 queryKey: ["comments", universityCode],
             });
@@ -53,7 +56,10 @@ export function useComment(universityCode: string, universityId: string) {
     });
 
     return {
-        comments,
+        comments: pageData?.content || [],
+        pageData,
+        currentPage,
+        setCurrentPage,
         isLoading,
         isError,
         addComment,

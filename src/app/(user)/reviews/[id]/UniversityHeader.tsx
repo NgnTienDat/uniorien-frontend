@@ -91,7 +91,9 @@ export function UniversityHeader({ university, reviewCount }: UniversityHeaderPr
                                 </div>
                                 <div>
                                     <p className="text-xs text-slate-500">Đào tạo</p>
-                                    <p className="font-semibold text-slate-800">Đa ngành</p>
+                                    <p className="font-semibold text-slate-800">
+                                        {university.programsOffered || "---"}
+                                    </p>
                                 </div>
                             </div>
                         </div>

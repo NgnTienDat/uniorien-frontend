@@ -1,9 +1,6 @@
+import { CampusImage } from '@/types/review';
 import { Image as ImageIcon } from 'lucide-react';
 
-interface CampusImage {
-  id: number;
-  url: string;
-}
 
 interface UniversityCampusProps {
   images: CampusImage[];

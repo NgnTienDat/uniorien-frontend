@@ -4,7 +4,7 @@ import BenchmarkClient from "./BenchmarkClient";
 import { TrendingUp, Info, School } from "lucide-react";
 
 export const metadata = {
-  title: "Tra cứu điểm chuẩn đại học năm 2025 | UniBenchmarks",
+  title: "Tra cứu điểm chuẩn đại học năm 2025 | UniOrien",
   description: "Xem điểm chuẩn, phương thức tuyển sinh, và thông tin chi tiết các trường đại học năm 2025.",
 };
 

@@ -70,14 +70,13 @@ function UniReviewList({ universities }: UniReviewListProps) {
                         {/* --- BOTTOM SECTION: Rating & Stats --- */}
                         <div className="pt-3 border-t border-slate-100 flex items-center justify-between mt-auto">
                             <div className="flex items-center gap-3">
-                                {/* Rating Box */}
                                 <div className="flex items-center gap-1 bg-yellow-50 px-1.5 py-0.5 rounded text-yellow-700 border border-yellow-100">
                                     <span className="text-xs font-bold">{rating.toFixed(1)}</span>
                                     <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
                                 </div>
-                                <span className="text-xs text-slate-400">
+                                {/* <span className="text-xs text-slate-400">
                                     {reviewCount} bài viết
-                                </span>
+                                </span> */}
                             </div>
 
                             {/* Hover Icon Action */}
