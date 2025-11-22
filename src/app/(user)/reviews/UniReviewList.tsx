@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Star, MapPin, Users } from 'lucide-react';
+import { Star, MapPin, School, ArrowUpRight } from 'lucide-react';
 
 type University = {
     id: string;
@@ -11,7 +11,7 @@ type University = {
     logo?: string | null;
     description?: string | null;
     location?: string | null;
-    rating?: number; // thêm trường đánh giá (1–5)
+    rating?: number;
     reviewCount?: number;
 };
 
@@ -21,94 +21,68 @@ interface UniReviewListProps {
 
 function UniReviewList({ universities }: UniReviewListProps) {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {universities.map((u) => {
-                const rating = u.rating ?? 4.2;
-                const filledStars = Math.floor(rating);
-                const hasHalfStar = rating - filledStars >= 0.5;
-                const reviewCount = u.reviewCount ?? 1234;
-
+                const rating = u.rating ?? 4.5;
+                const reviewCount = u.reviewCount ?? 120;
+                
                 return (
                     <Link
                         key={u.id}
                         href={`/reviews/${u.universityCode}`}
-                        className="block group"
+                        className="group relative bg-white rounded-xl border border-slate-200 p-4 hover:border-blue-400 hover:shadow-lg transition-all duration-300 flex flex-col justify-between h-full"
                     >
-                        <div className="bg-white rounded-xl p-5 border border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                            <div className="flex gap-4 items-start">
-                                {/* Logo */}
-                                <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center overflow-hidden border">
-                                    {u.logo ? (
-                                        <img
-                                            src={u.logo}
-                                            alt={u.universityName}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : (
-                                        <span className="text-lg font-semibold text-blue-600">
-                                            {u.universityCode}
-                                        </span>
-                                    )}
-                                </div>
+                        {/* --- TOP SECTION: Logo & Basic Info --- */}
+                        <div className="flex items-start gap-3 mb-3">
+                            {/* Logo nhỏ gọn hơn (w-12 h-12) */}
+                            <div className="w-12 h-12 rounded-lg border border-slate-100 bg-white flex items-center justify-center overflow-hidden p-1 shrink-0 shadow-sm">
+                                {u.logo ? (
+                                    <img
+                                        src={u.logo}
+                                        alt={u.universityName}
+                                        className="w-full h-full object-contain"
+                                    />
+                                ) : (
+                                    <School className="text-blue-200" size={24} />
+                                )}
+                            </div>
 
-                                {/* Info */}
-                                <div className="flex flex-col flex-1 min-w-0">
-                                    <h3 className="text-base font-semibold text-gray-800 line-clamp-2 min-h-[3rem] mb-1 group-hover:text-blue-600">
+                            {/* Tên & Mã trường */}
+                            <div className="flex-1 min-w-0">
+                                <div className="flex justify-between items-start gap-2">
+                                    <h3 className="text-sm font-bold text-slate-800 leading-tight line-clamp-2 group-hover:text-blue-700 transition-colors">
                                         {u.universityName}
                                     </h3>
-
-                                    {u.location && (
-                                        <div className="flex items-center text-xs text-gray-500 mb-2">
-                                            <MapPin className="w-3 h-3 mr-1" />
-                                            <span className="truncate">{u.location}</span>
-                                        </div>
-                                    )}
-
-                                    {/* Rating */}
-                                    <div className="flex items-center mb-2">
-                                        {[...Array(5)].map((_, i) => {
-                                            const filled =
-                                                i < filledStars ||
-                                                (i === filledStars && hasHalfStar);
-                                            return (
-                                                <Star
-                                                    key={i}
-                                                    className={`w-4 h-4 ${filled
-                                                            ? 'text-yellow-400 fill-yellow-400'
-                                                            : 'text-gray-300'
-                                                        }`}
-                                                />
-                                            );
-                                        })}
-                                        <span className="ml-2 text-sm text-gray-600">
-                                            {rating.toFixed(1)}
-                                        </span>
-                                    </div>
-
-                                    {/* Reviews count */}
-                                    <div className="flex items-center text-xs text-gray-500">
-                                        <Users className="w-3 h-3 mr-1" />
-                                        <span>{reviewCount.toLocaleString()} đánh giá</span>
-                                    </div>
-
-                                    {/* View more */}
-                                    <div className="mt-3 text-blue-500 text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-                                        <span>Xem chi tiết</span>
-                                        <svg
-                                            className="w-4 h-4"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M9 5l7 7-7 7"
-                                            />
-                                        </svg>
-                                    </div>
+                                    {/* Mã trường dạng Badge nhỏ */}
+                                    <span className="shrink-0 px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[10px] font-bold rounded border border-slate-200">
+                                        {u.universityCode}
+                                    </span>
                                 </div>
+                                
+                                {/* Địa điểm */}
+                                <div className="flex items-center mt-1.5 text-xs text-slate-500">
+                                    <MapPin className="w-3 h-3 mr-1 text-slate-400" />
+                                    <span className="truncate max-w-[180px]">{u.location || "Đang cập nhật"}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* --- BOTTOM SECTION: Rating & Stats --- */}
+                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between mt-auto">
+                            <div className="flex items-center gap-3">
+                                {/* Rating Box */}
+                                <div className="flex items-center gap-1 bg-yellow-50 px-1.5 py-0.5 rounded text-yellow-700 border border-yellow-100">
+                                    <span className="text-xs font-bold">{rating.toFixed(1)}</span>
+                                    <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
+                                </div>
+                                <span className="text-xs text-slate-400">
+                                    {reviewCount} bài viết
+                                </span>
+                            </div>
+
+                            {/* Hover Icon Action */}
+                            <div className="w-6 h-6 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all">
+                                <ArrowUpRight size={14} />
                             </div>
                         </div>
                     </Link>

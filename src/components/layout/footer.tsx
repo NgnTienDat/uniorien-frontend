@@ -20,12 +20,12 @@ const Footer: React.FC = () => {
                         
                         <p className="text-slate-600 leading-relaxed">
                             Nền tảng tư vấn chọn trường đại học tích hợp AI ChatBot. 
-                            Chúng tôi hỗ trợ thí sinh và phụ huynh tìm được trường, ngành học phù hợp dựa trên dữ liệu chuẩn xác.
+                            Hỗ trợ thí sinh và phụ huynh tìm được trường, ngành học phù hợp dựa trên dữ liệu chuẩn xác.
                         </p>
                         
                         <div className="pt-2 text-xs text-slate-500 italic border-t border-slate-100">
                             <Briefcase size={16} className="inline mr-1 -mt-0.5 text-slate-400" /> 
-                            Thiết kế &amp; Xây dựng bởi Nguyễn Tiến Đạt - Sinh viên năm 4 ngành Khoa học máy tính.
+                            Thiết kế &amp; Phát triển bởi Nguyễn Tiến Đạt - Sinh viên ngành Khoa học máy tính.
                         </div>
                     </div>
 
@@ -56,7 +56,7 @@ const Footer: React.FC = () => {
                                     href="/about" 
                                     className="text-blue-600 hover:text-blue-800 transition-colors font-medium flex items-center gap-2"
                                 >
-                                    <span className="text-xs">•</span> Về chúng tôi
+                                    <span className="text-xs">•</span> Về UniOrien
                                 </Link>
                             </li>
                         </ul>
@@ -65,7 +65,7 @@ const Footer: React.FC = () => {
                     {/* --- 3. Thông tin liên hệ & Mạng xã hội --- */}
                     <div className='px-6 md:pl-8'>
                         <h3 className="text-lg font-semibold mb-5 text-slate-800 border-b border-blue-500 pb-1 inline-block">
-                            Kết nối với Dat
+                            Thông tin Liên Hệ
                         </h3>
                         
                         {/* Social Icons */}
@@ -105,7 +105,7 @@ const Footer: React.FC = () => {
 
                 {/* --- Copyright --- */}
                 <div className="mt-10 pt-6 border-t border-slate-200 text-center text-xs text-slate-500">
-                    <p>Copyright © 2025 - Nguyen Tien Dat. All Rights Reserved.</p>
+                    <p>Copyright © 2025 - UniOrien. All Rights Reserved.</p>
                 </div>
             </div>
         </footer>
